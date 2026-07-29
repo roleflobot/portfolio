@@ -3,39 +3,239 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>간단 사주 보기</title>
+  <title>사주 & 고민 상담</title>
+  <style>
+    :root {
+      --bg-1: #f4f1fb;
+      --bg-2: #e9e4fb;
+      --card: #ffffff;
+      --accent: #7c5cff;
+      --accent-dark: #5f3dd9;
+      --text: #2c2740;
+      --muted: #7a7391;
+      --border: #e4e0f5;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Apple SD Gothic Neo", "Malgun Gothic", "Segoe UI", sans-serif;
+      background: linear-gradient(160deg, var(--bg-1), var(--bg-2));
+      color: var(--text);
+      padding: 40px 16px 80px;
+    }
+
+    .page {
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    header h1 {
+      font-size: 28px;
+      margin: 0 0 8px;
+    }
+
+    header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 30px rgba(92, 66, 200, 0.08);
+      border: 1px solid var(--border);
+    }
+
+    .card h2 {
+      margin: 0 0 16px;
+      font-size: 18px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    input[type="date"],
+    input[type="time"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #faf9ff;
+      color: var(--text);
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      appearance: none;
+      border: none;
+      border-radius: 999px;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      background: var(--accent);
+      color: white;
+      transition: background 0.15s ease, transform 0.15s ease;
+    }
+
+    button:hover {
+      background: var(--accent-dark);
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    button.secondary {
+      background: white;
+      color: var(--accent-dark);
+      border: 1px solid var(--accent);
+    }
+
+    button.secondary:hover {
+      background: var(--bg-1);
+    }
+
+    .result {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: var(--bg-1);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      min-height: 20px;
+    }
+
+    .result:empty {
+      display: none;
+    }
+
+    .result.loading {
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .result.error {
+      background: #fdeceb;
+      color: #b3261e;
+    }
+  </style>
 </head>
 <body>
-  <h1>간단 사주 보기</h1>
+  <div class="page">
+    <header>
+      <h1>🔮 사주 & 고민 상담</h1>
+      <p>재미로 보는 사주풀이와, 편하게 털어놓는 고민 상담이에요.</p>
+    </header>
 
-  <form id="saju-form">
-    <label>
-      생년월일
-      <input type="date" id="birth-date" required />
-    </label>
-    <br />
-    <label>
-      태어난 시간 (모르면 비워두세요)
-      <input type="time" id="birth-time" />
-    </label>
-    <br />
-    <label>
-      성별
-      <select id="gender">
-        <option value="male">남성</option>
-        <option value="female">여성</option>
-      </select>
-    </label>
-    <br />
-    <button type="submit">사주 보기</button>
-    <button type="button" id="today-btn">오늘의 운세 보기</button>
-  </form>
+    <section class="card">
+      <h2>사주 보기</h2>
+      <form id="saju-form">
+        <div class="field">
+          <label for="birth-date">생년월일</label>
+          <input type="date" id="birth-date" required />
+        </div>
+        <div class="field">
+          <label for="birth-time">태어난 시간 (모르면 비워두세요)</label>
+          <input type="time" id="birth-time" />
+        </div>
+        <div class="field">
+          <label for="gender">성별</label>
+          <select id="gender">
+            <option value="male">남성</option>
+            <option value="female">여성</option>
+          </select>
+        </div>
+        <div class="btn-row">
+          <button type="submit">사주 보기</button>
+          <button type="button" id="today-btn" class="secondary">오늘의 운세 보기</button>
+        </div>
+      </form>
+      <div id="result" class="result"></div>
+      <div id="today-result" class="result"></div>
+    </section>
 
-  <pre id="result"></pre>
-  <pre id="today-result"></pre>
+    <section class="card">
+      <h2>고민 상담</h2>
+      <p style="margin: -8px 0 14px; font-size: 13px; color: var(--muted);">
+        위 '사주 보기'에 입력한 생년월일을 바탕으로, 사주 성향에 맞춰 고민과 진로를 상담해드려요.
+      </p>
+      <div class="field">
+        <label for="worry-input">요즘 신경 쓰이는 일이나 진로 고민을 편하게 적어보세요</label>
+        <textarea id="worry-input" placeholder="예: 요즘 진로 때문에 고민이 많아요..."></textarea>
+      </div>
+      <div class="btn-row">
+        <button type="button" id="worry-btn">상담 받기</button>
+      </div>
+      <div id="worry-result" class="result"></div>
+    </section>
 
-  <!-- saju.config.js는 GEMINI_API_KEY를 정의합니다. saju.config.example.js를 복사해서 만드세요. -->
-  <script src="saju.config.js"></script>
+    <section class="card">
+      <h2>오늘의 행운 음식</h2>
+      <div class="field">
+        <label for="city-select">지역 (날씨 조회용)</label>
+        <select id="city-select">
+          <option value="서울">서울</option>
+          <option value="부산">부산</option>
+          <option value="인천">인천</option>
+          <option value="대구">대구</option>
+          <option value="대전">대전</option>
+          <option value="광주">광주</option>
+          <option value="제주">제주</option>
+        </select>
+      </div>
+      <div class="btn-row">
+        <button type="button" id="food-btn">행운의 음식 추천받기</button>
+      </div>
+      <div id="food-result" class="result"></div>
+    </section>
+  </div>
+
+  <!-- GEMINI_API_KEY는 이제 서버(main.py)에서만 사용되고 브라우저로는 전달되지 않습니다. -->
   <script src="saju.js"></script>
 </body>
 </html>

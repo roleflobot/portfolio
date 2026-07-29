@@ -1,34 +1,61 @@
 // saju.js
-// 생년월일/시간/성별을 받아 Gemini API로 간단한 사주 풀이를 요청하는 스크립트입니다.
-// GEMINI_API_KEY는 saju.config.js(gitignore 처리됨)에서 불러옵니다.
-
-const MODEL = "gemini-3.5-flash-lite"; // 토큰 절약을 위해 가볍고 저렴한 모델 사용
+// 사주 풀이 / 오늘의 운세 / 고민 상담 / 행운의 음식을 FastAPI 서버(main.py)에 요청하는 스크립트입니다.
+// Gemini API 호출과 GEMINI_API_KEY는 전부 서버 쪽에만 있고, 이 파일은 서버의 /api/* 엔드포인트만 호출합니다.
 
 const form = document.getElementById("saju-form");
 const resultBox = document.getElementById("result");
 const todayBtn = document.getElementById("today-btn");
 const todayResultBox = document.getElementById("today-result");
+const worryBtn = document.getElementById("worry-btn");
+const worryInput = document.getElementById("worry-input");
+const worryResultBox = document.getElementById("worry-result");
+const foodBtn = document.getElementById("food-btn");
+const citySelect = document.getElementById("city-select");
+const foodResultBox = document.getElementById("food-result");
+
+// 결과 박스에 로딩/에러 상태를 표시하는 작은 헬퍼입니다.
+function setBoxState(box, text, state) {
+  box.textContent = text;
+  box.classList.remove("loading", "error");
+  if (state) box.classList.add(state);
+}
+
+// 서버의 /api/* 엔드포인트를 호출하고 결과 텍스트를 반환합니다.
+async function callApi(path, payload) {
+  const response = await fetch(path, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data?.detail ?? `HTTP ${response.status}`);
+  }
+
+  return data.text;
+}
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
-  const birthDate = document.getElementById("birth-date").value; // YYYY-MM-DD
-  const birthTime = document.getElementById("birth-time").value; // HH:MM
-  const gender = document.getElementById("gender").value; // "male" | "female"
+  const birthDate = document.getElementById("birth-date").value;
+  const birthTime = document.getElementById("birth-time").value;
+  const gender = document.getElementById("gender").value;
 
   if (!birthDate) {
-    resultBox.textContent = "생년월일을 입력해주세요.";
+    setBoxState(resultBox, "생년월일을 입력해주세요.", "error");
     return;
   }
 
-  resultBox.textContent = "사주를 보는 중...";
+  setBoxState(resultBox, "사주를 보는 중...", "loading");
 
   try {
-    const prompt = buildPrompt({ birthDate, birthTime, gender });
-    const text = await askGemini(prompt);
-    resultBox.textContent = text;
+    const text = await callApi("/api/saju", { birthDate, birthTime, gender });
+    setBoxState(resultBox, text);
   } catch (error) {
-    resultBox.textContent = `오류가 발생했습니다: ${error.message}`;
+    setBoxState(resultBox, `오류가 발생했습니다: ${error.message}`, "error");
   }
 });
 
@@ -37,83 +64,61 @@ todayBtn.addEventListener("click", async () => {
   const gender = document.getElementById("gender").value;
 
   if (!birthDate) {
-    todayResultBox.textContent = "생년월일을 먼저 입력해주세요.";
+    setBoxState(todayResultBox, "생년월일을 먼저 입력해주세요.", "error");
     return;
   }
 
-  todayResultBox.textContent = "오늘의 운세를 보는 중...";
+  setBoxState(todayResultBox, "오늘의 운세를 보는 중...", "loading");
 
   try {
-    const todayDate = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
-    const prompt = buildTodayPrompt({ birthDate, gender, todayDate });
-    const text = await askGemini(prompt);
-    todayResultBox.textContent = text;
+    const text = await callApi("/api/today", { birthDate, gender });
+    setBoxState(todayResultBox, text);
   } catch (error) {
-    todayResultBox.textContent = `오류가 발생했습니다: ${error.message}`;
+    setBoxState(todayResultBox, `오류가 발생했습니다: ${error.message}`, "error");
   }
 });
 
-// 생년월일/성별과 오늘 날짜를 바탕으로 오늘의 운세 프롬프트를 구성합니다.
-function buildTodayPrompt({ birthDate, gender, todayDate }) {
-  const genderText = gender === "male" ? "남성" : "여성";
+worryBtn.addEventListener("click", async () => {
+  const birthDate = document.getElementById("birth-date").value;
+  const gender = document.getElementById("gender").value;
+  const worry = worryInput.value.trim();
 
-  return [
-    "너는 사주팔자를 봐주는 전문가야. 아래 사람의 오늘 하루 운세만 짧게 봐줘.",
-    `- 생년월일: ${birthDate}`,
-    `- 성별: ${genderText}`,
-    `- 오늘 날짜: ${todayDate}`,
-    "",
-    "총운, 주의할 점을 합쳐서 2~3문장으로 아주 간결하게 답해줘.",
-    "재미로 보는 것이니 가볍고 핵심만 답해줘.",
-  ].join("\n");
-}
-
-// 생년월일/시간/성별을 바탕으로 사주 프롬프트를 구성합니다.
-function buildPrompt({ birthDate, birthTime, gender }) {
-  const genderText = gender === "male" ? "남성" : "여성";
-  const timeText = birthTime ? `${birthTime}` : "모름";
-
-  return [
-    "너는 사주팔자를 봐주는 전문가야. 아래 정보를 바탕으로 간단한 사주 풀이를 해줘.",
-    `- 생년월일: ${birthDate}`,
-    `- 태어난 시간: ${timeText}`,
-    `- 성별: ${genderText}`,
-    "",
-    "성격, 올해의 운세, 조언을 각각 소제목으로 나눠서 총 3~4문장으로 아주 간결하게 알려줘.",
-    "재미로 보는 것이니 너무 심각하지 않게, 짧고 핵심만 답해줘.",
-  ].join("\n");
-}
-
-// Gemini REST API(generateContent)를 호출하고 응답 텍스트를 반환합니다.
-// 토큰 사용량을 아끼기 위해 thinking을 끄고 출력 길이도 제한합니다.
-async function askGemini(prompt) {
-  const response = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-goog-api-key": GEMINI_API_KEY,
-      },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: {
-          maxOutputTokens: 300,
-        },
-      }),
-    }
-  );
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    // Gemini API가 반환하는 오류를 사람이 읽기 쉬운 형태로 보여줍니다.
-    const message = data?.error?.message ?? "알 수 없는 오류";
-    throw new Error(`HTTP ${response.status} - ${message}`);
+  if (!birthDate) {
+    setBoxState(worryResultBox, "위 '사주 보기'에 생년월일을 먼저 입력해주세요.", "error");
+    return;
   }
 
-  const parts = data?.candidates?.[0]?.content?.parts ?? [];
-  const text = parts.map((part) => part.text).filter(Boolean).join("");
+  if (!worry) {
+    setBoxState(worryResultBox, "고민 내용을 입력해주세요.", "error");
+    return;
+  }
 
-  return text || "(응답이 비어있습니다)";
-}
+  setBoxState(worryResultBox, "사주를 바탕으로 상담하는 중...", "loading");
+
+  try {
+    const text = await callApi("/api/worry", { birthDate, gender, worry });
+    setBoxState(worryResultBox, text);
+  } catch (error) {
+    setBoxState(worryResultBox, `오류가 발생했습니다: ${error.message}`, "error");
+  }
+});
+
+foodBtn.addEventListener("click", async () => {
+  const birthDate = document.getElementById("birth-date").value;
+  const gender = document.getElementById("gender").value;
+  const city = citySelect.value;
+
+  if (!birthDate) {
+    setBoxState(foodResultBox, "생년월일을 먼저 입력해주세요.", "error");
+    return;
+  }
+
+  setBoxState(foodResultBox, "날씨를 확인하고 음식을 추천하는 중...", "loading");
+
+  try {
+    const text = await callApi("/api/food", { birthDate, gender, city });
+    setBoxState(foodResultBox, text);
+  } catch (error) {
+    setBoxState(foodResultBox, `오류가 발생했습니다: ${error.message}`, "error");
+  }
+});

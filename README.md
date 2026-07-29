@@ -60,6 +60,30 @@ python gemini_chat.py
 python gemini_chat.py "파이썬 데코레이터를 한 문장으로 설명해줘"
 ```
 
+## 사주 & 고민 상담 (FastAPI + saju.html)
+
+생년월일 기반 사주풀이, 오늘의 운세, 사주 기반 고민/진로 상담, 날씨를 고려한 행운의 음식 추천까지
+제공하는 웹 페이지입니다. `main.py`(FastAPI)가 `saju.html`을 서빙하고, Gemini API 호출은 전부
+서버에서만 처리합니다. **API 키가 브라우저에 절대 노출되지 않습니다.**
+
+### 설치 방법
+
+```bash
+pip install -r requirements.txt
+```
+
+### Gemini API 키 설정 방법
+
+Node/Python 예제와 동일한 `.env` 파일을 그대로 사용합니다. (위 "Gemini API 키 설정 방법" 참고)
+
+### 실행 명령어
+
+```bash
+uvicorn main:app --reload
+```
+
+브라우저에서 `http://localhost:8000` 접속하면 됩니다.
+
 ### ⚠️ 주의사항
 
 **절대로 `.env` 파일이나 실제 API 키를 GitHub에 커밋/푸시하지 마세요.** 이 저장소는 공개(Public) 저장소이므로, API 키가 노출되면 누구나 해당 키로 API를 호출해 요금이 청구될 수 있습니다. `.env`는 `.gitignore`에 등록되어 있지만, 커밋 전에 `git status`로 한 번 더 확인하는 것을 권장합니다.
