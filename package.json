@@ -1,0 +1,14 @@
+{
+  "name": "gemini-api-example",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Minimal Node.js example that calls the official Google Gemini API",
+  "type": "module",
+  "main": "gemini-chat.js",
+  "scripts": {
+    "start": "node gemini-chat.js"
+  },
+  "dependencies": {
+    "@google/genai": "^1.0.0"
+  }
+}
