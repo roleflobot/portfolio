@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>간단 사주 보기</title>
+</head>
+<body>
+  <h1>간단 사주 보기</h1>
+
+  <form id="saju-form">
+    <label>
+      생년월일
+      <input type="date" id="birth-date" required />
+    </label>
+    <br />
+    <label>
+      태어난 시간 (모르면 비워두세요)
+      <input type="time" id="birth-time" />
+    </label>
+    <br />
+    <label>
+      성별
+      <select id="gender">
+        <option value="male">남성</option>
+        <option value="female">여성</option>
+      </select>
+    </label>
+    <br />
+    <button type="submit">사주 보기</button>
+    <button type="button" id="today-btn">오늘의 운세 보기</button>
+  </form>
+
+  <pre id="result"></pre>
+  <pre id="today-result"></pre>
+
+  <!-- saju.config.js는 GEMINI_API_KEY를 정의합니다. saju.config.example.js를 복사해서 만드세요. -->
+  <script src="saju.config.js"></script>
+  <script src="saju.js"></script>
+</body>
+</html>
