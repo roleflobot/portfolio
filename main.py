@@ -82,6 +82,11 @@ class WorryRequest(BaseModel):
     worry: str
 
 
+class QuoteRequest(BaseModel):
+    birthDate: str
+    gender: str
+
+
 class FoodRequest(BaseModel):
     birthDate: str
     gender: str
@@ -188,6 +193,28 @@ def api_worry(req: WorryRequest):
         "형식: 1) 사주 성향 한 줄 짚기 2) 고민 공감 3) 사주 기반 조언(진로 고민이면 구체적 방향 포함).",
         "전체 5~6문장으로 따뜻하지만 간결하게 답해줘.",
         "전문적인 의료/법률/재정 상담이 필요한 내용이면, 조언과 함께 관련 전문가와 상담해보길 권해줘.",
+    ])
+    return {"text": ask_gemini(prompt)}
+
+
+@app.post("/api/quote")
+def api_quote(req: QuoteRequest):
+    today_date = datetime.now().strftime("%Y-%m-%d")
+    prompt = "\n".join([
+        "너는 사주와 오늘의 운세에 어울리는 명언/일화를 소개해주는 전문가야.",
+        f"- 생년월일: {req.birthDate}",
+        f"- 성별: {gender_text(req.gender)}",
+        f"- 오늘 날짜: {today_date}",
+        "",
+        "이 사람의 사주 기운과 오늘의 운세 느낌에 어울리는,",
+        "실제로 존재하는 유명한 명언 또는 잘 알려진 위인/역사적 일화를 하나 골라서 소개해줘.",
+        "절대로 지어내지 말고, 실존 인물의 실제 명언이나 실제 있었던 일화만 인용해줘.",
+        "",
+        "형식:",
+        "1. 명언(또는 일화 핵심 문장)을 **굵게** 표시하고 큰따옴표로 인용",
+        "2. 누가 한 말/어떤 일화인지 출처를 밝히기 (예: - 인물 이름)",
+        "3. 왜 이 사람의 사주·오늘 운세와 어울리는지 1~2문장으로 짧게 설명",
+        "전체 4~5문장 이내로 간결하게 답해줘.",
     ])
     return {"text": ask_gemini(prompt)}
 

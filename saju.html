@@ -215,7 +215,21 @@
     </section>
 
     <section class="card">
+      <h2>오늘의 한마디</h2>
+      <p style="margin: -8px 0 14px; font-size: 13px; color: var(--muted);">
+        당신의 사주와 오늘의 운세를 바탕으로, 짧은 이야기나 명언을 하나 들려드려요.
+      </p>
+      <div class="btn-row">
+        <button type="button" id="quote-btn">오늘의 한마디 받기</button>
+      </div>
+      <div id="quote-result" class="result"></div>
+    </section>
+
+    <section class="card">
       <h2>오늘의 행운 음식</h2>
+      <p style="margin: -8px 0 14px; font-size: 13px; color: var(--muted);">
+        생년월일(사주)과 선택한 지역의 오늘 날씨·계절을 함께 고려해서 어울리는 음식을 추천해드려요.
+      </p>
       <div class="field">
         <label for="city-select">지역 (날씨 조회용)</label>
         <select id="city-select">

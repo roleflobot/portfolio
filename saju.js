@@ -12,10 +12,29 @@ const worryResultBox = document.getElementById("worry-result");
 const foodBtn = document.getElementById("food-btn");
 const citySelect = document.getElementById("city-select");
 const foodResultBox = document.getElementById("food-result");
+const quoteBtn = document.getElementById("quote-btn");
+const quoteResultBox = document.getElementById("quote-result");
+
+// HTML 특수문자를 이스케이프해서 innerHTML에 안전하게 넣을 수 있게 합니다.
+function escapeHtml(text) {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+// Gemini 응답의 소제목(#)/굵게(**)/목록(*)/줄바꿈만 간단히 HTML로 변환합니다. (가벼운 마크다운 렌더링)
+function renderMarkup(text) {
+  return escapeHtml(text)
+    .replace(/^#{1,6}\s+(.+)$/gm, "<strong>$1</strong>")
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/^\* /gm, "• ")
+    .replace(/\n/g, "<br>");
+}
 
 // 결과 박스에 로딩/에러 상태를 표시하는 작은 헬퍼입니다.
 function setBoxState(box, text, state) {
-  box.textContent = text;
+  box.innerHTML = renderMarkup(text);
   box.classList.remove("loading", "error");
   if (state) box.classList.add(state);
 }
@@ -100,6 +119,25 @@ worryBtn.addEventListener("click", async () => {
     setBoxState(worryResultBox, text);
   } catch (error) {
     setBoxState(worryResultBox, `오류가 발생했습니다: ${error.message}`, "error");
+  }
+});
+
+quoteBtn.addEventListener("click", async () => {
+  const birthDate = document.getElementById("birth-date").value;
+  const gender = document.getElementById("gender").value;
+
+  if (!birthDate) {
+    setBoxState(quoteResultBox, "생년월일을 먼저 입력해주세요.", "error");
+    return;
+  }
+
+  setBoxState(quoteResultBox, "오늘의 한마디를 준비하는 중...", "loading");
+
+  try {
+    const text = await callApi("/api/quote", { birthDate, gender });
+    setBoxState(quoteResultBox, text);
+  } catch (error) {
+    setBoxState(quoteResultBox, `오류가 발생했습니다: ${error.message}`, "error");
   }
 });
 
