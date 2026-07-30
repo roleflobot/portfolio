@@ -3,7 +3,7 @@
 # GEMINI_API_KEY는 여기(서버)에서만 사용되고 브라우저에는 절대 전달되지 않습니다.
 #
 # 실행 방법:
-#   uvicorn main:app --reload
+#   python main.py
 
 import os
 from datetime import datetime
@@ -108,12 +108,12 @@ def season_text() -> str:
     return "겨울"
 
 
-def ask_gemini(prompt: str) -> str:
+def ask_gemini(prompt: str, max_output_tokens: int = 350) -> str:
     try:
         response = client.models.generate_content(
             model=MODEL,
             contents=prompt,
-            config={"max_output_tokens": 300},
+            config={"max_output_tokens": max_output_tokens},
         )
     except errors.APIError as error:
         # Gemini API가 반환하는 오류를 그대로 클라이언트에 전달합니다.
@@ -194,7 +194,7 @@ def api_worry(req: WorryRequest):
         "전체 5~6문장으로 따뜻하지만 간결하게 답해줘.",
         "전문적인 의료/법률/재정 상담이 필요한 내용이면, 조언과 함께 관련 전문가와 상담해보길 권해줘.",
     ])
-    return {"text": ask_gemini(prompt)}
+    return {"text": ask_gemini(prompt, max_output_tokens=500)}
 
 
 @app.post("/api/quote")
@@ -240,3 +240,9 @@ def api_food(req: FoodRequest):
         "그 이유를 3~4문장으로 간결하게 추천해줘. 실제로 먹을 수 있는 구체적인 음식 이름을 알려줘.",
     ])
     return {"text": ask_gemini(prompt)}
+
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(app, host="127.0.0.1", port=8000)

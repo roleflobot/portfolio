@@ -79,10 +79,18 @@ Node/Python 예제와 동일한 `.env` 파일을 그대로 사용합니다. (위
 ### 실행 명령어
 
 ```bash
-uvicorn main:app --reload
+python main.py
 ```
 
 브라우저에서 `http://localhost:8000` 접속하면 됩니다.
+
+개발 중 코드 수정 시 자동 재시작이 필요하면 아래처럼 실행해도 됩니다.
+
+```bash
+uvicorn main:app --reload
+```
+
+Windows에서는 `run.bat`을 더블클릭해도 됩니다. (서버 실행 + 브라우저 자동 열기를 한 번에 처리하는 편의 스크립트일 뿐, 위 명령어와 동일한 서버를 띄웁니다.)
 
 ### ⚠️ 주의사항
 

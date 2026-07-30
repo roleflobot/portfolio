@@ -3,6 +3,7 @@
 // Gemini API 호출과 GEMINI_API_KEY는 전부 서버 쪽에만 있고, 이 파일은 서버의 /api/* 엔드포인트만 호출합니다.
 
 const form = document.getElementById("saju-form");
+const sajuBtn = document.getElementById("saju-btn");
 const resultBox = document.getElementById("result");
 const todayBtn = document.getElementById("today-btn");
 const todayResultBox = document.getElementById("today-result");
@@ -39,6 +40,17 @@ function setBoxState(box, text, state) {
   if (state) box.classList.add(state);
 }
 
+// 버튼을 비활성화한 채로 작업을 실행합니다. (중복 클릭 방지 + 로딩 중임을 시각적으로 표시)
+async function runWithButton(button, task) {
+  if (button.disabled) return; // 이미 요청 중이면 무시
+  button.disabled = true;
+  try {
+    await task();
+  } finally {
+    button.disabled = false;
+  }
+}
+
 // 서버의 /api/* 엔드포인트를 호출하고 결과 텍스트를 반환합니다.
 async function callApi(path, payload) {
   const response = await fetch(path, {
@@ -68,14 +80,16 @@ form.addEventListener("submit", async (event) => {
     return;
   }
 
-  setBoxState(resultBox, "사주를 보는 중...", "loading");
+  await runWithButton(sajuBtn, async () => {
+    setBoxState(resultBox, "사주를 보는 중...", "loading");
 
-  try {
-    const text = await callApi("/api/saju", { birthDate, birthTime, gender });
-    setBoxState(resultBox, text);
-  } catch (error) {
-    setBoxState(resultBox, `오류가 발생했습니다: ${error.message}`, "error");
-  }
+    try {
+      const text = await callApi("/api/saju", { birthDate, birthTime, gender });
+      setBoxState(resultBox, text);
+    } catch (error) {
+      setBoxState(resultBox, `오류가 발생했습니다: ${error.message}`, "error");
+    }
+  });
 });
 
 todayBtn.addEventListener("click", async () => {
@@ -87,14 +101,16 @@ todayBtn.addEventListener("click", async () => {
     return;
   }
 
-  setBoxState(todayResultBox, "오늘의 운세를 보는 중...", "loading");
+  await runWithButton(todayBtn, async () => {
+    setBoxState(todayResultBox, "오늘의 운세를 보는 중...", "loading");
 
-  try {
-    const text = await callApi("/api/today", { birthDate, gender });
-    setBoxState(todayResultBox, text);
-  } catch (error) {
-    setBoxState(todayResultBox, `오류가 발생했습니다: ${error.message}`, "error");
-  }
+    try {
+      const text = await callApi("/api/today", { birthDate, gender });
+      setBoxState(todayResultBox, text);
+    } catch (error) {
+      setBoxState(todayResultBox, `오류가 발생했습니다: ${error.message}`, "error");
+    }
+  });
 });
 
 worryBtn.addEventListener("click", async () => {
@@ -112,14 +128,16 @@ worryBtn.addEventListener("click", async () => {
     return;
   }
 
-  setBoxState(worryResultBox, "사주를 바탕으로 상담하는 중...", "loading");
+  await runWithButton(worryBtn, async () => {
+    setBoxState(worryResultBox, "사주를 바탕으로 상담하는 중...", "loading");
 
-  try {
-    const text = await callApi("/api/worry", { birthDate, gender, worry });
-    setBoxState(worryResultBox, text);
-  } catch (error) {
-    setBoxState(worryResultBox, `오류가 발생했습니다: ${error.message}`, "error");
-  }
+    try {
+      const text = await callApi("/api/worry", { birthDate, gender, worry });
+      setBoxState(worryResultBox, text);
+    } catch (error) {
+      setBoxState(worryResultBox, `오류가 발생했습니다: ${error.message}`, "error");
+    }
+  });
 });
 
 quoteBtn.addEventListener("click", async () => {
@@ -131,14 +149,16 @@ quoteBtn.addEventListener("click", async () => {
     return;
   }
 
-  setBoxState(quoteResultBox, "오늘의 한마디를 준비하는 중...", "loading");
+  await runWithButton(quoteBtn, async () => {
+    setBoxState(quoteResultBox, "오늘의 한마디를 준비하는 중...", "loading");
 
-  try {
-    const text = await callApi("/api/quote", { birthDate, gender });
-    setBoxState(quoteResultBox, text);
-  } catch (error) {
-    setBoxState(quoteResultBox, `오류가 발생했습니다: ${error.message}`, "error");
-  }
+    try {
+      const text = await callApi("/api/quote", { birthDate, gender });
+      setBoxState(quoteResultBox, text);
+    } catch (error) {
+      setBoxState(quoteResultBox, `오류가 발생했습니다: ${error.message}`, "error");
+    }
+  });
 });
 
 foodBtn.addEventListener("click", async () => {
@@ -151,12 +171,14 @@ foodBtn.addEventListener("click", async () => {
     return;
   }
 
-  setBoxState(foodResultBox, "날씨를 확인하고 음식을 추천하는 중...", "loading");
+  await runWithButton(foodBtn, async () => {
+    setBoxState(foodResultBox, "날씨를 확인하고 음식을 추천하는 중...", "loading");
 
-  try {
-    const text = await callApi("/api/food", { birthDate, gender, city });
-    setBoxState(foodResultBox, text);
-  } catch (error) {
-    setBoxState(foodResultBox, `오류가 발생했습니다: ${error.message}`, "error");
-  }
+    try {
+      const text = await callApi("/api/food", { birthDate, gender, city });
+      setBoxState(foodResultBox, text);
+    } catch (error) {
+      setBoxState(foodResultBox, `오류가 발생했습니다: ${error.message}`, "error");
+    }
+  });
 });
