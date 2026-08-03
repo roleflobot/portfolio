@@ -101,7 +101,8 @@ export async function POST(request: NextRequest) {
         roadAddress: item.roadAddress,
         lat: Number(item.mapy) / 1e7,
         lng: Number(item.mapx) / 1e7,
-        mapUrl: `https://map.naver.com/p/search/${encodeURIComponent(cleanName)}`,
+        // 상호명만으로 검색하면 동명의 다른 업종 업체가 같이 뜨는 경우가 있어 '냉면'을 붙여 정확도를 높인다
+        mapUrl: `https://map.naver.com/p/search/${encodeURIComponent(`${cleanName} 냉면`)}`,
         score: scoreCandidate(cleanName, item.roadAddress || item.address, name, district || ''),
       }
     })
