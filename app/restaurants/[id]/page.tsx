@@ -171,20 +171,20 @@ export default function RestaurantDetailPage() {
                 />
               </dd>
             </div>
-            {restaurant.visited && (
-              <div>
-                <dt className="text-sm text-zinc-500 dark:text-zinc-400 mb-2">개인 별점</dt>
-                <dd>
-                  <RatingInput
-                    id={restaurant.id}
-                    rating={restaurant.rating}
-                    onChange={(rating) =>
-                      setRestaurant((prev) => (prev ? { ...prev, rating } : prev))
-                    }
-                  />
-                </dd>
-              </div>
-            )}
+            <div>
+              <dt className="text-sm text-zinc-500 dark:text-zinc-400 mb-2">개인 별점</dt>
+              <dd>
+                <RatingInput
+                  id={restaurant.id}
+                  rating={restaurant.rating}
+                  onChange={(rating) =>
+                    setRestaurant((prev) =>
+                      prev ? { ...prev, rating, visited: rating ? true : prev.visited } : prev
+                    )
+                  }
+                />
+              </dd>
+            </div>
           </dl>
 
           <div>

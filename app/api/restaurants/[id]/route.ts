@@ -158,6 +158,10 @@ export async function PATCH(
           )
         }
         update.rating = ratingNum
+        if (visited === undefined) {
+          // 별점을 매겼다는 것은 방문했다는 뜻이므로 자동으로 방문완료 처리한다
+          update.visited = true
+        }
       } else {
         update.rating = null
       }
