@@ -224,26 +224,14 @@ export default function RestaurantDetailPage() {
             </button>
           </div>
 
-          {restaurant.naver_map_url && (
-            <a
-              href={restaurant.naver_map_url}
-              className="block text-center px-6 py-3 bg-wood-sage hover:bg-wood-sage-hover text-wood-accent-ink font-medium rounded-sm transition-colors"
-            >
-              네이버 지도 앱에서 보기
-            </a>
-          )}
           {restaurant.map_url && (
             <a
               href={restaurant.map_url}
               target="_blank"
               rel="noopener noreferrer"
-              className={
-                restaurant.naver_map_url
-                  ? 'block text-center text-sm text-wood-muted underline -mt-2'
-                  : 'block text-center px-6 py-3 bg-wood-sage hover:bg-wood-sage-hover text-wood-accent-ink font-medium rounded-sm transition-colors'
-              }
+              className="block text-center px-6 py-3 bg-wood-sage hover:bg-wood-sage-hover text-wood-accent-ink font-medium rounded-sm transition-colors"
             >
-              {restaurant.naver_map_url ? '앱이 없거나 PC라면 웹에서 보기' : '네이버 지도에서 보기'}
+              네이버 지도에서 보기
             </a>
           )}
 
