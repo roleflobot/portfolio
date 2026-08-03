@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 
 interface Restaurant {
   id: number
@@ -8,6 +9,9 @@ interface Restaurant {
   food: string
   rating: number
   created_at: string
+  district: string
+  price: number
+  solo_status: boolean
 }
 
 export default function Home() {
@@ -33,13 +37,21 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-black">
       <main className="flex-1 max-w-4xl mx-auto w-full px-6 py-12">
-        <div className="mb-12">
-          <h1 className="text-4xl font-bold text-black dark:text-white mb-2">
-            🍽️ 맛집 추천
-          </h1>
-          <p className="text-lg text-zinc-600 dark:text-zinc-400">
-            최고의 맛집들을 발견하세요
-          </p>
+        <div className="flex items-start justify-between mb-12">
+          <div>
+            <h1 className="text-4xl font-bold text-black dark:text-white mb-2">
+              🍽️ 맛집 추천
+            </h1>
+            <p className="text-lg text-zinc-600 dark:text-zinc-400">
+              최고의 맛집들을 발견하세요
+            </p>
+          </div>
+          <Link
+            href="/restaurants/new"
+            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors whitespace-nowrap"
+          >
+            + 식당 등록
+          </Link>
         </div>
 
         {loading ? (
