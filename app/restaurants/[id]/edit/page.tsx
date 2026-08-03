@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import RestaurantForm from '@/components/RestaurantForm'
+import { authFetch } from '@/lib/authFetch'
+import { useAuthGuard } from '@/lib/useAuthGuard'
 
 interface Restaurant {
   id: number
@@ -17,15 +19,18 @@ interface Restaurant {
 export default function EditRestaurantPage() {
   const params = useParams()
   const id = params.id as string
+  const session = useAuthGuard()
 
   const [restaurant, setRestaurant] = useState<Restaurant | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    if (!session) return
+
     const fetchRestaurant = async () => {
       try {
-        const response = await fetch(`/api/restaurants/${id}`)
+        const response = await authFetch(`/api/restaurants/${id}`)
         if (!response.ok) {
           throw new Error('식당 정보를 불러오지 못했습니다.')
         }
@@ -39,9 +44,9 @@ export default function EditRestaurantPage() {
     }
 
     fetchRestaurant()
-  }, [id])
+  }, [session, id])
 
-  if (loading) {
+  if (!session || loading) {
     return (
       <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-black">
         <main className="flex-1 max-w-2xl mx-auto w-full px-6 py-12">

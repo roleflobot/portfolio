@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase'
+import { getRequestUser } from '@/lib/supabase-server'
 import { NextResponse, NextRequest } from 'next/server'
 
 const SOLO_STATUS_VALUES = [
@@ -10,6 +10,11 @@ const SOLO_STATUS_VALUES = [
 
 export async function GET(request: NextRequest) {
   try {
+    const { user, supabase } = await getRequestUser(request)
+    if (!user) {
+      return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 })
+    }
+
     const { searchParams } = new URL(request.url)
     const visited = searchParams.get('visited')
     const district = searchParams.get('district')
@@ -48,7 +53,11 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('📝 Creating new restaurant...')
+    const { user, supabase } = await getRequestUser(request)
+    if (!user) {
+      return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 })
+    }
+
     const body = await request.json()
 
     // 입력값 검증
@@ -110,6 +119,7 @@ export async function POST(request: NextRequest) {
           price: price || null,
           solo_status: solo_status || '미확인',
           map_url: map_url?.trim() || null,
+          user_id: user.id,
         },
       ])
       .select()

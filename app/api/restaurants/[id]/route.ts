@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase'
+import { getRequestUser } from '@/lib/supabase-server'
 import { NextResponse, NextRequest } from 'next/server'
 
 const SOLO_STATUS_VALUES = [
@@ -9,10 +9,14 @@ const SOLO_STATUS_VALUES = [
 ]
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params
+  const { user, supabase } = await getRequestUser(request)
+  if (!user) {
+    return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 })
+  }
 
   const { data, error } = await supabase
     .from('restaurants')
@@ -34,6 +38,11 @@ export async function PUT(
   const { id } = await params
 
   try {
+    const { user, supabase } = await getRequestUser(request)
+    if (!user) {
+      return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 })
+    }
+
     const body = await request.json()
     const { name, district, address, price, solo_status, map_url } = body
 
@@ -118,6 +127,11 @@ export async function PATCH(
   const { id } = await params
 
   try {
+    const { user, supabase } = await getRequestUser(request)
+    if (!user) {
+      return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 })
+    }
+
     const body = await request.json()
     const { visited, rating, memo } = body
 
@@ -189,10 +203,14 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params
+  const { user, supabase } = await getRequestUser(request)
+  if (!user) {
+    return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 })
+  }
 
   const { error } = await supabase.from('restaurants').delete().eq('id', id)
 

@@ -1,6 +1,15 @@
+'use client'
+
 import RestaurantForm from '@/components/RestaurantForm'
+import { useAuthGuard } from '@/lib/useAuthGuard'
 
 export default function NewRestaurantPage() {
+  const session = useAuthGuard()
+
+  if (!session) {
+    return null
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-black">
       <main className="flex-1 max-w-2xl mx-auto w-full px-6 py-12">

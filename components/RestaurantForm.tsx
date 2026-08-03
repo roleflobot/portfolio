@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { SEOUL_DISTRICTS } from '@/lib/districts'
+import { authFetch } from '@/lib/authFetch'
 
 const SOLO_STATUS_OPTIONS = [
   '미확인',
@@ -85,7 +86,7 @@ export default function RestaurantForm({
           : '/api/restaurants'
       const method = isEditing ? 'PUT' : 'POST'
 
-      const response = await fetch(url, {
+      const response = await authFetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',

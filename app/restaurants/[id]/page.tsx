@@ -5,6 +5,8 @@ import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
 import VisitedToggle from '@/components/VisitedToggle'
 import RatingInput from '@/components/RatingInput'
+import { authFetch } from '@/lib/authFetch'
+import { useAuthGuard } from '@/lib/useAuthGuard'
 
 interface Restaurant {
   id: number
@@ -23,6 +25,7 @@ export default function RestaurantDetailPage() {
   const router = useRouter()
   const params = useParams()
   const id = params.id as string
+  const session = useAuthGuard()
 
   const [restaurant, setRestaurant] = useState<Restaurant | null>(null)
   const [loading, setLoading] = useState(true)
@@ -32,9 +35,11 @@ export default function RestaurantDetailPage() {
   const [savingMemo, setSavingMemo] = useState(false)
 
   useEffect(() => {
+    if (!session) return
+
     const fetchRestaurant = async () => {
       try {
-        const response = await fetch(`/api/restaurants/${id}`)
+        const response = await authFetch(`/api/restaurants/${id}`)
         if (!response.ok) {
           throw new Error('식당 정보를 불러오지 못했습니다.')
         }
@@ -49,12 +54,12 @@ export default function RestaurantDetailPage() {
     }
 
     fetchRestaurant()
-  }, [id])
+  }, [session, id])
 
   const handleSaveMemo = async () => {
     setSavingMemo(true)
     try {
-      const response = await fetch(`/api/restaurants/${id}`, {
+      const response = await authFetch(`/api/restaurants/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ memo: memoDraft }),
@@ -80,7 +85,7 @@ export default function RestaurantDetailPage() {
 
     setDeleting(true)
     try {
-      const response = await fetch(`/api/restaurants/${id}`, {
+      const response = await authFetch(`/api/restaurants/${id}`, {
         method: 'DELETE',
       })
 
@@ -96,7 +101,7 @@ export default function RestaurantDetailPage() {
     }
   }
 
-  if (loading) {
+  if (!session || loading) {
     return (
       <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-black">
         <main className="flex-1 max-w-2xl mx-auto w-full px-6 py-12">

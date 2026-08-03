@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { authFetch } from '@/lib/authFetch'
 
 interface VisitedToggleProps {
   id: number
@@ -14,7 +15,7 @@ export default function VisitedToggle({ id, visited, onChange }: VisitedTogglePr
   const handleToggle = async () => {
     setLoading(true)
     try {
-      const response = await fetch(`/api/restaurants/${id}`, {
+      const response = await authFetch(`/api/restaurants/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ visited: !visited }),

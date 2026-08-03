@@ -1,8 +1,12 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { SEOUL_DISTRICTS } from '@/lib/districts'
+import { authFetch } from '@/lib/authFetch'
+import { useAuthGuard } from '@/lib/useAuthGuard'
+import { supabase } from '@/lib/supabase'
 
 interface Restaurant {
   id: number
@@ -17,6 +21,8 @@ interface Restaurant {
 }
 
 export default function Home() {
+  const router = useRouter()
+  const session = useAuthGuard()
   const [restaurants, setRestaurants] = useState<Restaurant[]>([])
   const [loading, setLoading] = useState(true)
   const [tab, setTab] = useState<'want' | 'visited'>('want')
@@ -24,6 +30,8 @@ export default function Home() {
   const [search, setSearch] = useState('')
 
   useEffect(() => {
+    if (!session) return
+
     const fetchRestaurants = async () => {
       setLoading(true)
       try {
@@ -33,7 +41,7 @@ export default function Home() {
           searchParams.set('district', district)
         }
 
-        const response = await fetch(`/api/restaurants?${searchParams.toString()}`)
+        const response = await authFetch(`/api/restaurants?${searchParams.toString()}`)
         const data = await response.json()
         setRestaurants(data)
       } catch (error) {
@@ -44,7 +52,16 @@ export default function Home() {
     }
 
     fetchRestaurants()
-  }, [tab, district])
+  }, [session, tab, district])
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    router.replace('/login')
+  }
+
+  if (!session) {
+    return null
+  }
 
   const filteredRestaurants = restaurants.filter((restaurant) =>
     restaurant.name.toLowerCase().includes(search.trim().toLowerCase())
@@ -62,12 +79,20 @@ export default function Home() {
               서울의 평양냉면집을 저장하고 혼밥 도장을 깨보세요
             </p>
           </div>
-          <Link
-            href="/restaurants/new"
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors whitespace-nowrap"
-          >
-            + 식당 등록
-          </Link>
+          <div className="flex gap-2">
+            <Link
+              href="/restaurants/new"
+              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors whitespace-nowrap"
+            >
+              + 식당 등록
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-black dark:text-white font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors whitespace-nowrap"
+            >
+              로그아웃
+            </button>
+          </div>
         </div>
 
         <div className="flex gap-2 mb-6">

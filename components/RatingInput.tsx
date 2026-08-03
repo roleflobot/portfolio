@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { authFetch } from '@/lib/authFetch'
 
 interface RatingInputProps {
   id: number
@@ -15,7 +16,7 @@ export default function RatingInput({ id, rating, onChange }: RatingInputProps) 
     setLoading(true)
     try {
       const nextRating = rating === value ? null : value
-      const response = await fetch(`/api/restaurants/${id}`, {
+      const response = await authFetch(`/api/restaurants/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ rating: nextRating }),
