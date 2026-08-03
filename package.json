@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "setup": "node scripts/full-setup.js"
+    "setup": "node scripts/full-setup.js",
+    "clean": "node scripts/clean-temp-data.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.0",
