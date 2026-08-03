@@ -1,12 +1,6 @@
 import { getRequestUser } from '@/lib/supabase-server'
+import { SOLO_STATUS_VALUES } from '@/lib/soloStatus'
 import { NextResponse, NextRequest } from 'next/server'
-
-const SOLO_STATUS_VALUES = [
-  '미확인',
-  '혼자 이용 가능',
-  '시간대에 따라 가능',
-  '혼자 이용 어려움',
-]
 
 export async function GET(request: NextRequest) {
   try {

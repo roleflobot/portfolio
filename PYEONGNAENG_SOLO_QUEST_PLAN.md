@@ -180,10 +180,11 @@ create table restaurants (
 
 ### `solo_status` 허용값
 
-- `미확인`
-- `혼자 이용 가능`
-- `시간대에 따라 가능`
-- `혼자 이용 어려움`
+혼밥(1인석) 가능 여부를 어떻게 확인했는지 나타낸다.
+
+- `네이버 지도 정보` — 네이버 지도의 좌석·공간 정보에서 1인석을 확인함
+- `직접 확인` — 실제 방문해서 직접 확인함
+- `미확인` — 아직 확인하지 않음
 
 ---
 
@@ -195,7 +196,7 @@ create table restaurants (
 - `rating`: 1~5 또는 `null`
 - `visited = false`이면 `rating`은 `null`로 저장
 - `map_url`: 입력된 경우 URL 형식 확인
-- `solo_status`: 지정된 네 가지 값 중 하나만 허용
+- `solo_status`: 지정된 세 가지 값 중 하나만 허용
 
 ---
 

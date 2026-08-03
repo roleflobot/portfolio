@@ -4,13 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { SEOUL_DISTRICTS } from '@/lib/districts'
 import { authFetch } from '@/lib/authFetch'
-
-const SOLO_STATUS_OPTIONS = [
-  '미확인',
-  '혼자 이용 가능',
-  '시간대에 따라 가능',
-  '혼자 이용 어려움',
-]
+import { SOLO_STATUS_VALUES } from '@/lib/soloStatus'
 
 interface RestaurantFormProps {
   initialData?: {
@@ -196,7 +190,7 @@ export default function RestaurantForm({
           onChange={handleChange}
           className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-zinc-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
-          {SOLO_STATUS_OPTIONS.map((option) => (
+          {SOLO_STATUS_VALUES.map((option) => (
             <option key={option} value={option}>
               {option}
             </option>
