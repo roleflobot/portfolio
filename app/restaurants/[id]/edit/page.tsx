@@ -1,0 +1,95 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
+import RestaurantForm from '@/components/RestaurantForm'
+
+interface Restaurant {
+  id: number
+  name: string
+  district: string
+  address: string | null
+  price: number | null
+  solo_status: string
+  map_url: string | null
+}
+
+export default function EditRestaurantPage() {
+  const params = useParams()
+  const id = params.id as string
+
+  const [restaurant, setRestaurant] = useState<Restaurant | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchRestaurant = async () => {
+      try {
+        const response = await fetch(`/api/restaurants/${id}`)
+        if (!response.ok) {
+          throw new Error('식당 정보를 불러오지 못했습니다.')
+        }
+        const data = await response.json()
+        setRestaurant(data)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : '오류가 발생했습니다.')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchRestaurant()
+  }, [id])
+
+  if (loading) {
+    return (
+      <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-black">
+        <main className="flex-1 max-w-2xl mx-auto w-full px-6 py-12">
+          <p className="text-center text-zinc-600 dark:text-zinc-400">로딩 중...</p>
+        </main>
+      </div>
+    )
+  }
+
+  if (error || !restaurant) {
+    return (
+      <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-black">
+        <main className="flex-1 max-w-2xl mx-auto w-full px-6 py-12">
+          <p className="text-center text-red-600 dark:text-red-400">
+            {error || '식당을 찾을 수 없습니다.'}
+          </p>
+        </main>
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-black">
+      <main className="flex-1 max-w-2xl mx-auto w-full px-6 py-12">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-black dark:text-white mb-2">
+            맛집 수정
+          </h1>
+          <p className="text-zinc-600 dark:text-zinc-400">
+            {restaurant.name} 정보를 수정합니다
+          </p>
+        </div>
+
+        <div className="bg-white dark:bg-zinc-900 rounded-lg shadow-md p-8">
+          <RestaurantForm
+            isEditing
+            initialData={{
+              id: restaurant.id,
+              name: restaurant.name,
+              district: restaurant.district,
+              address: restaurant.address || '',
+              price: restaurant.price || 0,
+              solo_status: restaurant.solo_status,
+              map_url: restaurant.map_url || '',
+            }}
+          />
+        </div>
+      </main>
+    </div>
+  )
+}

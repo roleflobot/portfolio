@@ -7,11 +7,11 @@ interface Restaurant {
   id: number
   name: string
   food: string
-  rating: number
+  rating: number | null
   created_at: string
   district: string
-  price: number
-  solo_status: boolean
+  price: number | null
+  solo_status: string
 }
 
 export default function Home() {
@@ -69,24 +69,36 @@ export default function Home() {
             {restaurants.map((restaurant) => (
               <div
                 key={restaurant.id}
-                className="bg-white dark:bg-zinc-900 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+                className="bg-white dark:bg-zinc-900 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow flex flex-col"
               >
                 <div className="flex items-start justify-between mb-4">
                   <h2 className="text-xl font-semibold text-black dark:text-white">
                     {restaurant.name}
                   </h2>
-                  <div className="bg-yellow-100 dark:bg-yellow-900 px-3 py-1 rounded-full">
-                    <span className="text-sm font-medium text-yellow-800 dark:text-yellow-100">
-                      ⭐ {restaurant.rating}
-                    </span>
-                  </div>
+                  {restaurant.rating && (
+                    <div className="bg-yellow-100 dark:bg-yellow-900 px-3 py-1 rounded-full">
+                      <span className="text-sm font-medium text-yellow-800 dark:text-yellow-100">
+                        ⭐ {restaurant.rating}
+                      </span>
+                    </div>
+                  )}
                 </div>
-                <p className="text-lg text-zinc-700 dark:text-zinc-300 mb-4">
+                <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-1">
+                  {restaurant.district}
+                </p>
+                <p className="text-lg text-zinc-700 dark:text-zinc-300 mb-2">
                   🍜 {restaurant.food}
+                  {restaurant.price ? ` · ${restaurant.price.toLocaleString()}원` : ''}
                 </p>
-                <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                  {new Date(restaurant.created_at).toLocaleDateString('ko-KR')}
+                <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-4">
+                  {restaurant.solo_status}
                 </p>
+                <Link
+                  href={`/restaurants/${restaurant.id}`}
+                  className="mt-auto text-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-black dark:text-white text-sm font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
+                >
+                  상세보기
+                </Link>
               </div>
             ))}
           </div>

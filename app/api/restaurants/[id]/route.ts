@@ -8,41 +8,35 @@ const SOLO_STATUS_VALUES = [
   '혼자 이용 어려움',
 ]
 
-export async function GET() {
-  try {
-    console.log('🔍 Fetching restaurants from Supabase...')
-    const { data, error } = await supabase
-      .from('restaurants')
-      .select('*')
-      .order('id', { ascending: true })
+export async function GET(
+  _request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params
 
-    console.log('📊 Data:', data)
-    console.log('❌ Error:', error)
+  const { data, error } = await supabase
+    .from('restaurants')
+    .select('*')
+    .eq('id', id)
+    .single()
 
-    if (error) {
-      console.error('Supabase error:', error.message)
-      return NextResponse.json({ error: error.message }, { status: 500 })
-    }
-
-    return NextResponse.json(data)
-  } catch (error) {
-    console.error('Catch error:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch restaurants' },
-      { status: 500 }
-    )
+  if (error || !data) {
+    return NextResponse.json({ error: '식당을 찾을 수 없습니다.' }, { status: 404 })
   }
+
+  return NextResponse.json(data)
 }
 
-export async function POST(request: NextRequest) {
-  try {
-    console.log('📝 Creating new restaurant...')
-    const body = await request.json()
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params
 
-    // 입력값 검증
+  try {
+    const body = await request.json()
     const { name, district, address, price, solo_status, map_url } = body
 
-    // 필수 필드 검증
     if (!name || typeof name !== 'string' || !name.trim()) {
       return NextResponse.json(
         { error: '식당명은 필수 입력 사항입니다.' },
@@ -57,7 +51,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 가격 검증
     if (price !== undefined && price !== null && price !== '') {
       const priceNum = Number(price)
       if (isNaN(priceNum) || priceNum < 0) {
@@ -86,37 +79,53 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Supabase에 저장
     const { data, error } = await supabase
       .from('restaurants')
-      .insert([
-        {
-          name: name.trim(),
-          food: '평양냉면',
-          district: district.trim(),
-          address: address?.trim() || null,
-          price: price || null,
-          solo_status: solo_status || '미확인',
-          map_url: map_url?.trim() || null,
-        },
-      ])
+      .update({
+        name: name.trim(),
+        district: district.trim(),
+        address: address?.trim() || null,
+        price: price || null,
+        solo_status: solo_status || '미확인',
+        map_url: map_url?.trim() || null,
+      })
+      .eq('id', id)
       .select()
+      .single()
 
     if (error) {
       console.error('Supabase error:', error.message)
       return NextResponse.json(
-        { error: '식당 등록에 실패했습니다.' },
+        { error: '식당 수정에 실패했습니다.' },
         { status: 500 }
       )
     }
 
-    console.log('✅ Restaurant created:', data)
-    return NextResponse.json(data?.[0], { status: 201 })
+    return NextResponse.json(data)
   } catch (error) {
     console.error('Catch error:', error)
     return NextResponse.json(
-      { error: '식당 등록에 실패했습니다.' },
+      { error: '식당 수정에 실패했습니다.' },
       { status: 500 }
     )
   }
+}
+
+export async function DELETE(
+  _request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params
+
+  const { error } = await supabase.from('restaurants').delete().eq('id', id)
+
+  if (error) {
+    console.error('Supabase error:', error.message)
+    return NextResponse.json(
+      { error: '식당 삭제에 실패했습니다.' },
+      { status: 500 }
+    )
+  }
+
+  return NextResponse.json({ success: true })
 }

@@ -3,6 +3,13 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
+const SOLO_STATUS_OPTIONS = [
+  '미확인',
+  '혼자 이용 가능',
+  '시간대에 따라 가능',
+  '혼자 이용 어려움',
+]
+
 interface RestaurantFormProps {
   initialData?: {
     id?: number
@@ -10,7 +17,8 @@ interface RestaurantFormProps {
     district: string
     address: string
     price: number
-    solo_status: boolean
+    solo_status: string
+    map_url: string
   }
   isEditing?: boolean
 }
@@ -28,7 +36,8 @@ export default function RestaurantForm({
     district: initialData?.district || '',
     address: initialData?.address || '',
     price: initialData?.price || 0,
-    solo_status: initialData?.solo_status || false,
+    solo_status: initialData?.solo_status || '미확인',
+    map_url: initialData?.map_url || '',
   })
 
   const handleChange = (
@@ -38,12 +47,7 @@ export default function RestaurantForm({
 
     setFormData((prev) => ({
       ...prev,
-      [name]:
-        type === 'checkbox'
-          ? (e.target as HTMLInputElement).checked
-          : type === 'number'
-            ? parseFloat(value) || 0
-            : value,
+      [name]: type === 'number' ? parseFloat(value) || 0 : value,
     }))
   }
 
@@ -74,8 +78,14 @@ export default function RestaurantForm({
     setLoading(true)
 
     try {
-      const response = await fetch('/api/restaurants', {
-        method: 'POST',
+      const url =
+        isEditing && initialData?.id
+          ? `/api/restaurants/${initialData.id}`
+          : '/api/restaurants'
+      const method = isEditing ? 'PUT' : 'POST'
+
+      const response = await fetch(url, {
+        method,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -87,7 +97,8 @@ export default function RestaurantForm({
         throw new Error(errorData.error || '저장에 실패했습니다.')
       }
 
-      router.push('/')
+      const saved = await response.json()
+      router.push(isEditing ? `/restaurants/${saved.id}` : '/')
       router.refresh()
     } catch (err) {
       setError(err instanceof Error ? err.message : '저장에 실패했습니다.')
@@ -97,7 +108,7 @@ export default function RestaurantForm({
   }
 
   const handleCancel = () => {
-    router.push('/')
+    router.push(isEditing && initialData?.id ? `/restaurants/${initialData.id}` : '/')
   }
 
   return (
@@ -193,18 +204,36 @@ export default function RestaurantForm({
         />
       </div>
 
-      <div className="flex items-center">
-        <input
-          type="checkbox"
-          name="solo_status"
-          id="solo_status"
-          checked={formData.solo_status}
-          onChange={handleChange}
-          className="w-4 h-4 border border-gray-300 rounded bg-white dark:bg-zinc-800 focus:ring-2 focus:ring-blue-500 cursor-pointer"
-        />
-        <label htmlFor="solo_status" className="ml-3 text-sm font-medium text-black dark:text-white cursor-pointer">
-          혼밥 가능
+      <div>
+        <label className="block text-sm font-medium text-black dark:text-white mb-2">
+          혼밥 가능 여부
         </label>
+        <select
+          name="solo_status"
+          value={formData.solo_status}
+          onChange={handleChange}
+          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-zinc-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          {SOLO_STATUS_OPTIONS.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-black dark:text-white mb-2">
+          네이버 지도 링크
+        </label>
+        <input
+          type="text"
+          name="map_url"
+          value={formData.map_url}
+          onChange={handleChange}
+          placeholder="예: https://map.naver.com/..."
+          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-zinc-800 text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
       </div>
 
       <div className="flex gap-3">
