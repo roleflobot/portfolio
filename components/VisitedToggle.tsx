@@ -44,7 +44,7 @@ export default function VisitedToggle({ id, visited, onChange }: VisitedTogglePr
           : 'border border-wood-border-strong text-wood-ink hover:bg-wood-bg'
       }`}
     >
-      {loading ? '처리 중...' : visited ? '✅ 다녀왔어요' : '다녀왔어요'}
+      {loading ? '처리 중...' : visited ? '✅ 다녀왔어요' : '아직 안 가봤어요'}
     </button>
   )
 }
