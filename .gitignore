@@ -36,6 +36,13 @@ yarn-error.log*
 # vercel
 .vercel
 
+# mcp (contains access tokens)
+.mcp.json
+
+# scripts (contains secrets)
+/scripts/setup-restaurants.js
+/scripts/create-restaurants-table.js
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
