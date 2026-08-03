@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { SEOUL_DISTRICTS } from '@/lib/districts'
 
 interface Restaurant {
   id: number
@@ -12,16 +13,27 @@ interface Restaurant {
   district: string
   price: number | null
   solo_status: string
+  visited: boolean
 }
 
 export default function Home() {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([])
   const [loading, setLoading] = useState(true)
+  const [tab, setTab] = useState<'want' | 'visited'>('want')
+  const [district, setDistrict] = useState('')
+  const [search, setSearch] = useState('')
 
   useEffect(() => {
     const fetchRestaurants = async () => {
+      setLoading(true)
       try {
-        const response = await fetch('/api/restaurants')
+        const searchParams = new URLSearchParams()
+        searchParams.set('visited', tab === 'visited' ? 'true' : 'false')
+        if (district) {
+          searchParams.set('district', district)
+        }
+
+        const response = await fetch(`/api/restaurants?${searchParams.toString()}`)
         const data = await response.json()
         setRestaurants(data)
       } catch (error) {
@@ -32,18 +44,22 @@ export default function Home() {
     }
 
     fetchRestaurants()
-  }, [])
+  }, [tab, district])
+
+  const filteredRestaurants = restaurants.filter((restaurant) =>
+    restaurant.name.toLowerCase().includes(search.trim().toLowerCase())
+  )
 
   return (
     <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-black">
       <main className="flex-1 max-w-4xl mx-auto w-full px-6 py-12">
-        <div className="flex items-start justify-between mb-12">
+        <div className="flex items-start justify-between mb-8">
           <div>
             <h1 className="text-4xl font-bold text-black dark:text-white mb-2">
-              🍽️ 맛집 추천
+              🍜 평양냉면 혼밥 도장깨기
             </h1>
             <p className="text-lg text-zinc-600 dark:text-zinc-400">
-              최고의 맛집들을 발견하세요
+              서울의 평양냉면집을 저장하고 혼밥 도장을 깨보세요
             </p>
           </div>
           <Link
@@ -54,19 +70,64 @@ export default function Home() {
           </Link>
         </div>
 
+        <div className="flex gap-2 mb-6">
+          <button
+            onClick={() => setTab('want')}
+            className={`px-5 py-2 rounded-lg font-medium transition-colors ${
+              tab === 'want'
+                ? 'bg-blue-600 text-white'
+                : 'bg-white dark:bg-zinc-900 text-black dark:text-white border border-gray-300 dark:border-gray-600'
+            }`}
+          >
+            가고 싶은 곳
+          </button>
+          <button
+            onClick={() => setTab('visited')}
+            className={`px-5 py-2 rounded-lg font-medium transition-colors ${
+              tab === 'visited'
+                ? 'bg-blue-600 text-white'
+                : 'bg-white dark:bg-zinc-900 text-black dark:text-white border border-gray-300 dark:border-gray-600'
+            }`}
+          >
+            다녀온 곳
+          </button>
+        </div>
+
+        <div className="flex flex-wrap gap-3 mb-8">
+          <select
+            value={district}
+            onChange={(e) => setDistrict(e.target.value)}
+            className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-zinc-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">전체 자치구</option>
+            {SEOUL_DISTRICTS.map((d) => (
+              <option key={d} value={d}>
+                {d}
+              </option>
+            ))}
+          </select>
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="식당명 검색"
+            className="flex-1 min-w-[200px] px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-zinc-800 text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
         {loading ? (
           <div className="text-center py-12">
             <p className="text-zinc-600 dark:text-zinc-400">로딩 중...</p>
           </div>
-        ) : restaurants.length === 0 ? (
+        ) : filteredRestaurants.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-zinc-600 dark:text-zinc-400">
-              등록된 맛집이 없습니다.
+              {tab === 'want' ? '가고 싶은 곳이 없습니다.' : '다녀온 곳이 없습니다.'}
             </p>
           </div>
         ) : (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {restaurants.map((restaurant) => (
+            {filteredRestaurants.map((restaurant) => (
               <div
                 key={restaurant.id}
                 className="bg-white dark:bg-zinc-900 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow flex flex-col"

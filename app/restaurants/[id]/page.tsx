@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
+import VisitedToggle from '@/components/VisitedToggle'
+import RatingInput from '@/components/RatingInput'
 
 interface Restaurant {
   id: number
@@ -26,6 +28,8 @@ export default function RestaurantDetailPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [deleting, setDeleting] = useState(false)
+  const [memoDraft, setMemoDraft] = useState('')
+  const [savingMemo, setSavingMemo] = useState(false)
 
   useEffect(() => {
     const fetchRestaurant = async () => {
@@ -36,6 +40,7 @@ export default function RestaurantDetailPage() {
         }
         const data = await response.json()
         setRestaurant(data)
+        setMemoDraft(data.memo || '')
       } catch (err) {
         setError(err instanceof Error ? err.message : '오류가 발생했습니다.')
       } finally {
@@ -45,6 +50,28 @@ export default function RestaurantDetailPage() {
 
     fetchRestaurant()
   }, [id])
+
+  const handleSaveMemo = async () => {
+    setSavingMemo(true)
+    try {
+      const response = await fetch(`/api/restaurants/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ memo: memoDraft }),
+      })
+
+      if (!response.ok) {
+        throw new Error('메모 저장에 실패했습니다.')
+      }
+
+      const data = await response.json()
+      setRestaurant((prev) => (prev ? { ...prev, memo: data.memo } : prev))
+    } catch (err) {
+      alert(err instanceof Error ? err.message : '메모 저장에 실패했습니다.')
+    } finally {
+      setSavingMemo(false)
+    }
+  }
 
   const handleDelete = async () => {
     if (!confirm('정말 이 식당을 삭제하시겠습니까?')) {
@@ -126,28 +153,54 @@ export default function RestaurantDetailPage() {
               <dd className="text-black dark:text-white">{restaurant.solo_status}</dd>
             </div>
             <div>
-              <dt className="text-sm text-zinc-500 dark:text-zinc-400">방문 여부</dt>
-              <dd className="text-black dark:text-white">
-                {restaurant.visited ? '다녀왔어요' : '아직 안 가봤어요'}
+              <dt className="text-sm text-zinc-500 dark:text-zinc-400 mb-2">방문 여부</dt>
+              <dd>
+                <VisitedToggle
+                  id={restaurant.id}
+                  visited={restaurant.visited}
+                  onChange={(visited) =>
+                    setRestaurant((prev) =>
+                      prev ? { ...prev, visited, rating: visited ? prev.rating : null } : prev
+                    )
+                  }
+                />
               </dd>
             </div>
             {restaurant.visited && (
               <div>
-                <dt className="text-sm text-zinc-500 dark:text-zinc-400">개인 별점</dt>
-                <dd className="text-black dark:text-white">
-                  {restaurant.rating ? `⭐ ${restaurant.rating} / 5` : '미입력'}
-                </dd>
-              </div>
-            )}
-            {restaurant.memo && (
-              <div>
-                <dt className="text-sm text-zinc-500 dark:text-zinc-400">메모</dt>
-                <dd className="text-black dark:text-white whitespace-pre-wrap">
-                  {restaurant.memo}
+                <dt className="text-sm text-zinc-500 dark:text-zinc-400 mb-2">개인 별점</dt>
+                <dd>
+                  <RatingInput
+                    id={restaurant.id}
+                    rating={restaurant.rating}
+                    onChange={(rating) =>
+                      setRestaurant((prev) => (prev ? { ...prev, rating } : prev))
+                    }
+                  />
                 </dd>
               </div>
             )}
           </dl>
+
+          <div>
+            <label className="block text-sm text-zinc-500 dark:text-zinc-400 mb-2">
+              메모
+            </label>
+            <textarea
+              value={memoDraft}
+              onChange={(e) => setMemoDraft(e.target.value)}
+              rows={3}
+              placeholder="혼밥 경험이나 한 줄 메모를 남겨보세요"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-zinc-800 text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
+            />
+            <button
+              onClick={handleSaveMemo}
+              disabled={savingMemo || memoDraft === (restaurant.memo || '')}
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors"
+            >
+              {savingMemo ? '저장 중...' : '메모 저장'}
+            </button>
+          </div>
 
           {restaurant.map_url && (
             <a

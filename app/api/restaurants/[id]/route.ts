@@ -111,6 +111,83 @@ export async function PUT(
   }
 }
 
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params
+
+  try {
+    const body = await request.json()
+    const { visited, rating, memo } = body
+
+    const update: Record<string, unknown> = {}
+
+    if (visited !== undefined) {
+      if (typeof visited !== 'boolean') {
+        return NextResponse.json(
+          { error: '방문 여부 값이 올바르지 않습니다.' },
+          { status: 400 }
+        )
+      }
+      update.visited = visited
+      if (!visited) {
+        // 방문하지 않은 식당은 별점을 저장하지 않는다
+        update.rating = null
+      }
+    }
+
+    if (rating !== undefined) {
+      if (rating !== null) {
+        const ratingNum = Number(rating)
+        if (!Number.isInteger(ratingNum) || ratingNum < 1 || ratingNum > 5) {
+          return NextResponse.json(
+            { error: '별점은 1~5 사이의 정수여야 합니다.' },
+            { status: 400 }
+          )
+        }
+        update.rating = ratingNum
+      } else {
+        update.rating = null
+      }
+    }
+
+    if (memo !== undefined) {
+      update.memo = typeof memo === 'string' ? memo.trim() || null : null
+    }
+
+    if (Object.keys(update).length === 0) {
+      return NextResponse.json(
+        { error: '수정할 항목이 없습니다.' },
+        { status: 400 }
+      )
+    }
+
+    const { data, error } = await supabase
+      .from('restaurants')
+      .update(update)
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (error || !data) {
+      console.error('Supabase error:', error?.message)
+      return NextResponse.json(
+        { error: '식당 정보 업데이트에 실패했습니다.' },
+        { status: 500 }
+      )
+    }
+
+    return NextResponse.json(data)
+  } catch (error) {
+    console.error('Catch error:', error)
+    return NextResponse.json(
+      { error: '식당 정보 업데이트에 실패했습니다.' },
+      { status: 500 }
+    )
+  }
+}
+
 export async function DELETE(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }

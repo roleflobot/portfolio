@@ -8,16 +8,28 @@ const SOLO_STATUS_VALUES = [
   '혼자 이용 어려움',
 ]
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    console.log('🔍 Fetching restaurants from Supabase...')
-    const { data, error } = await supabase
-      .from('restaurants')
-      .select('*')
-      .order('id', { ascending: true })
+    const { searchParams } = new URL(request.url)
+    const visited = searchParams.get('visited')
+    const district = searchParams.get('district')
+    const search = searchParams.get('search')
 
-    console.log('📊 Data:', data)
-    console.log('❌ Error:', error)
+    let query = supabase.from('restaurants').select('*').order('id', { ascending: true })
+
+    if (visited === 'true' || visited === 'false') {
+      query = query.eq('visited', visited === 'true')
+    }
+
+    if (district) {
+      query = query.eq('district', district)
+    }
+
+    if (search) {
+      query = query.ilike('name', `%${search}%`)
+    }
+
+    const { data, error } = await query
 
     if (error) {
       console.error('Supabase error:', error.message)
