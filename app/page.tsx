@@ -25,7 +25,7 @@ export default function Home() {
   const session = useAuthGuard()
   const [restaurants, setRestaurants] = useState<Restaurant[]>([])
   const [loading, setLoading] = useState(true)
-  const [tab, setTab] = useState<'want' | 'visited'>('want')
+  const [tab, setTab] = useState<'all' | 'want' | 'visited'>('all')
   const [district, setDistrict] = useState('')
   const [search, setSearch] = useState('')
 
@@ -36,7 +36,9 @@ export default function Home() {
       setLoading(true)
       try {
         const searchParams = new URLSearchParams()
-        searchParams.set('visited', tab === 'visited' ? 'true' : 'false')
+        if (tab !== 'all') {
+          searchParams.set('visited', tab === 'visited' ? 'true' : 'false')
+        }
         if (district) {
           searchParams.set('district', district)
         }
@@ -67,6 +69,16 @@ export default function Home() {
     restaurant.name.toLowerCase().includes(search.trim().toLowerCase())
   )
 
+  const pricedRestaurants = filteredRestaurants.filter(
+    (r): r is Restaurant & { price: number } => r.price != null
+  )
+  const averagePrice =
+    pricedRestaurants.length > 0
+      ? Math.round(
+          pricedRestaurants.reduce((sum, r) => sum + r.price, 0) / pricedRestaurants.length
+        )
+      : null
+
   return (
     <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-black">
       <main className="flex-1 max-w-4xl mx-auto w-full px-6 py-12">
@@ -95,7 +107,24 @@ export default function Home() {
           </div>
         </div>
 
+        {averagePrice !== null && (
+          <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-4">
+            평균 냉면 가격 <span className="font-semibold text-black dark:text-white">{averagePrice.toLocaleString()}원</span>
+            {' '}({pricedRestaurants.length}곳 기준)
+          </p>
+        )}
+
         <div className="flex gap-2 mb-6">
+          <button
+            onClick={() => setTab('all')}
+            className={`px-5 py-2 rounded-lg font-medium transition-colors ${
+              tab === 'all'
+                ? 'bg-blue-600 text-white'
+                : 'bg-white dark:bg-zinc-900 text-black dark:text-white border border-gray-300 dark:border-gray-600'
+            }`}
+          >
+            전체
+          </button>
           <button
             onClick={() => setTab('want')}
             className={`px-5 py-2 rounded-lg font-medium transition-colors ${
@@ -147,7 +176,11 @@ export default function Home() {
         ) : filteredRestaurants.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-zinc-600 dark:text-zinc-400">
-              {tab === 'want' ? '가고 싶은 곳이 없습니다.' : '다녀온 곳이 없습니다.'}
+              {tab === 'all'
+                ? '등록된 식당이 없습니다.'
+                : tab === 'want'
+                  ? '가고 싶은 곳이 없습니다.'
+                  : '다녀온 곳이 없습니다.'}
             </p>
           </div>
         ) : (
