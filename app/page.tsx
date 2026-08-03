@@ -88,7 +88,7 @@ export default function Home() {
               🍜 평양냉면 혼밥 도장깨기
             </h1>
             <p className="text-lg text-wood-muted">
-              서울의 평양냉면집을 저장하고 혼밥 도장을 깨보세요
+              서울의 1인 식사 가능한 평양냉면집을 저장하고 혼밥 도장을 깨보세요
             </p>
           </div>
           <div className="flex gap-2">

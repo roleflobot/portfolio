@@ -170,7 +170,7 @@ export default function RestaurantForm({
 
       <div>
         <label className={labelClass}>
-          평균 가격 (원)
+          평양냉면 가격 (원)
         </label>
         <input
           type="number"
