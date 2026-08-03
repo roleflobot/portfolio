@@ -8,12 +8,18 @@ interface RestaurantPhotoProps {
   id: number
   photoUrl: string | null
   onChange: (photoUrl: string | null) => void
+  compact?: boolean
 }
 
 const MAX_SIZE = 5 * 1024 * 1024
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 
-export default function RestaurantPhoto({ id, photoUrl, onChange }: RestaurantPhotoProps) {
+export default function RestaurantPhoto({
+  id,
+  photoUrl,
+  onChange,
+  compact = false,
+}: RestaurantPhotoProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -73,6 +79,8 @@ export default function RestaurantPhoto({ id, photoUrl, onChange }: RestaurantPh
     }
   }
 
+  const imageSizeClass = compact ? 'w-full aspect-square' : 'w-full h-64'
+
   return (
     <div>
       {photoUrl ? (
@@ -80,11 +88,13 @@ export default function RestaurantPhoto({ id, photoUrl, onChange }: RestaurantPh
         <img
           src={photoUrl}
           alt="식당 사진"
-          className="w-full h-64 object-cover rounded-lg"
+          className={`${imageSizeClass} object-cover rounded-lg`}
         />
       ) : (
-        <div className="w-full h-64 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center">
-          <span className="text-sm text-zinc-400">사진 없음</span>
+        <div
+          className={`${imageSizeClass} rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center`}
+        >
+          <span className="text-xs text-zinc-400 text-center px-1">사진 없음</span>
         </div>
       )}
 
@@ -99,11 +109,13 @@ export default function RestaurantPhoto({ id, photoUrl, onChange }: RestaurantPh
         type="button"
         onClick={() => inputRef.current?.click()}
         disabled={uploading}
-        className="mt-3 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 text-black dark:text-white text-sm font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors disabled:opacity-50"
+        className={`mt-2 w-full border border-gray-300 dark:border-gray-600 text-black dark:text-white font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors disabled:opacity-50 ${
+          compact ? 'px-2 py-1 text-xs' : 'px-4 py-2 text-sm'
+        }`}
       >
         {uploading ? '업로드 중...' : photoUrl ? '사진 변경' : '사진 업로드'}
       </button>
-      {error && <p className="mt-2 text-sm text-red-600 dark:text-red-400">{error}</p>}
+      {error && <p className="mt-2 text-xs text-red-600 dark:text-red-400">{error}</p>}
     </div>
   )
 }

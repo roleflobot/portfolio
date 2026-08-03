@@ -133,8 +133,7 @@ export default function RestaurantDetailPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-black">
-      <main className="flex-1 max-w-4xl mx-auto w-full px-6 py-12">
-        <div className="grid gap-6 md:grid-cols-[1fr_320px] items-start">
+      <main className="flex-1 max-w-2xl mx-auto w-full px-6 py-12">
         <div className="bg-white dark:bg-zinc-900 rounded-lg shadow-md p-8 space-y-6">
           <div>
             <h1 className="text-3xl font-bold text-black dark:text-white mb-1">
@@ -143,23 +142,38 @@ export default function RestaurantDetailPage() {
             <p className="text-zinc-600 dark:text-zinc-400">{restaurant.district}</p>
           </div>
 
+          <div className="flex gap-6">
+            <dl className="flex-1 space-y-4">
+              <div>
+                <dt className="text-sm text-zinc-500 dark:text-zinc-400">주소</dt>
+                <dd className="text-black dark:text-white">
+                  {restaurant.address || '등록된 주소가 없습니다.'}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm text-zinc-500 dark:text-zinc-400">평양냉면 가격</dt>
+                <dd className="text-black dark:text-white">
+                  {restaurant.price ? `${restaurant.price.toLocaleString()}원` : '미확인'}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm text-zinc-500 dark:text-zinc-400">혼밥 가능 여부</dt>
+                <dd className="text-black dark:text-white">{restaurant.solo_status}</dd>
+              </div>
+            </dl>
+            <div className="w-32 flex-shrink-0">
+              <RestaurantPhoto
+                id={restaurant.id}
+                photoUrl={restaurant.photo_url}
+                compact
+                onChange={(photo_url) =>
+                  setRestaurant((prev) => (prev ? { ...prev, photo_url } : prev))
+                }
+              />
+            </div>
+          </div>
+
           <dl className="space-y-4">
-            <div>
-              <dt className="text-sm text-zinc-500 dark:text-zinc-400">주소</dt>
-              <dd className="text-black dark:text-white">
-                {restaurant.address || '등록된 주소가 없습니다.'}
-              </dd>
-            </div>
-            <div>
-              <dt className="text-sm text-zinc-500 dark:text-zinc-400">평양냉면 가격</dt>
-              <dd className="text-black dark:text-white">
-                {restaurant.price ? `${restaurant.price.toLocaleString()}원` : '미확인'}
-              </dd>
-            </div>
-            <div>
-              <dt className="text-sm text-zinc-500 dark:text-zinc-400">혼밥 가능 여부</dt>
-              <dd className="text-black dark:text-white">{restaurant.solo_status}</dd>
-            </div>
             <div>
               <dt className="text-sm text-zinc-500 dark:text-zinc-400 mb-2">방문 여부</dt>
               <dd>
@@ -242,17 +256,6 @@ export default function RestaurantDetailPage() {
               {deleting ? '삭제 중...' : '삭제'}
             </button>
           </div>
-        </div>
-
-        <div className="bg-white dark:bg-zinc-900 rounded-lg shadow-md p-4 md:sticky md:top-8">
-          <RestaurantPhoto
-            id={restaurant.id}
-            photoUrl={restaurant.photo_url}
-            onChange={(photo_url) =>
-              setRestaurant((prev) => (prev ? { ...prev, photo_url } : prev))
-            }
-          />
-        </div>
         </div>
       </main>
     </div>
