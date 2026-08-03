@@ -1,6 +1,5 @@
 import { getRequestUser } from '@/lib/supabase-server'
 import { SOLO_STATUS_VALUES } from '@/lib/soloStatus'
-import { searchNaverPlace } from '@/lib/naverLocalSearch'
 import { NextResponse, NextRequest } from 'next/server'
 
 export async function GET(request: NextRequest) {
@@ -102,12 +101,6 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // 네이버 지역 검색 API로 좌표를 조회한다 (실패해도 등록은 계속 진행)
-    const place = await searchNaverPlace(`${name.trim()} 냉면`)
-    const resolvedMapUrl =
-      map_url?.trim() ||
-      `https://map.naver.com/p/search/${encodeURIComponent(`${name.trim()} 냉면`)}`
-
     // Supabase에 저장
     const { data, error } = await supabase
       .from('restaurants')
@@ -119,9 +112,7 @@ export async function POST(request: NextRequest) {
           address: address?.trim() || null,
           price: price || null,
           solo_status: solo_status || '미확인',
-          map_url: resolvedMapUrl,
-          lat: place?.lat ?? null,
-          lng: place?.lng ?? null,
+          map_url: map_url?.trim() || null,
           user_id: user.id,
         },
       ])
