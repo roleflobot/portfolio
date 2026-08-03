@@ -44,9 +44,11 @@ export default function RatingInput({ id, rating, onChange }: RatingInputProps) 
           disabled={loading}
           onClick={() => handleSelect(value)}
           aria-label={`${value}점`}
-          className="text-2xl leading-none disabled:opacity-50"
+          className={`text-2xl leading-none disabled:opacity-50 ${
+            rating && value <= rating ? 'text-wood-accent' : 'text-wood-border-strong'
+          }`}
         >
-          {rating && value <= rating ? '⭐' : '☆'}
+          {rating && value <= rating ? '★' : '☆'}
         </button>
       ))}
     </div>

@@ -107,17 +107,21 @@ export default function RestaurantForm({
     router.push(isEditing && initialData?.id ? `/restaurants/${initialData.id}` : '/')
   }
 
+  const inputClass =
+    'w-full px-4 py-2 border border-wood-border-strong rounded-sm bg-wood-surface text-wood-ink placeholder-wood-muted focus:outline-none focus:ring-2 focus:ring-wood-accent'
+  const labelClass = 'block text-sm font-medium text-wood-ink mb-2'
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {error && (
-        <div className="p-4 bg-red-100 dark:bg-red-900 rounded-lg border border-red-400 dark:border-red-700">
-          <p className="text-red-800 dark:text-red-100 text-sm">{error}</p>
+        <div className="p-4 bg-wood-error-bg rounded-sm border border-wood-error-border">
+          <p className="text-wood-error-ink text-sm">{error}</p>
         </div>
       )}
 
       <div>
-        <label className="block text-sm font-medium text-black dark:text-white mb-2">
-          식당명 <span className="text-red-500">*</span>
+        <label className={labelClass}>
+          식당명 <span className="text-wood-danger">*</span>
         </label>
         <input
           type="text"
@@ -126,20 +130,20 @@ export default function RestaurantForm({
           onChange={handleChange}
           placeholder="예: 서울 맛집"
           required
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-zinc-800 text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className={inputClass}
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-black dark:text-white mb-2">
-          자치구 <span className="text-red-500">*</span>
+        <label className={labelClass}>
+          자치구 <span className="text-wood-danger">*</span>
         </label>
         <select
           name="district"
           value={formData.district}
           onChange={handleChange}
           required
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-zinc-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className={inputClass}
         >
           <option value="">자치구를 선택하세요</option>
           {SEOUL_DISTRICTS.map((d) => (
@@ -151,7 +155,7 @@ export default function RestaurantForm({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-black dark:text-white mb-2">
+        <label className={labelClass}>
           주소
         </label>
         <textarea
@@ -160,12 +164,12 @@ export default function RestaurantForm({
           onChange={handleChange}
           placeholder="예: 서울시 강남구 테헤란로 123"
           rows={3}
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-zinc-800 text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className={inputClass}
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-black dark:text-white mb-2">
+        <label className={labelClass}>
           평균 가격 (원)
         </label>
         <input
@@ -176,19 +180,19 @@ export default function RestaurantForm({
           placeholder="0"
           min="0"
           step="1000"
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-zinc-800 text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className={inputClass}
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-black dark:text-white mb-2">
+        <label className={labelClass}>
           혼밥 가능 여부
         </label>
         <select
           name="solo_status"
           value={formData.solo_status}
           onChange={handleChange}
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-zinc-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className={inputClass}
         >
           {SOLO_STATUS_VALUES.map((option) => (
             <option key={option} value={option}>
@@ -199,7 +203,7 @@ export default function RestaurantForm({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-black dark:text-white mb-2">
+        <label className={labelClass}>
           네이버 지도 링크
         </label>
         <input
@@ -208,7 +212,7 @@ export default function RestaurantForm({
           value={formData.map_url}
           onChange={handleChange}
           placeholder="예: https://map.naver.com/..."
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-zinc-800 text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className={inputClass}
         />
       </div>
 
@@ -216,14 +220,14 @@ export default function RestaurantForm({
         <button
           type="submit"
           disabled={loading}
-          className="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium rounded-lg transition-colors"
+          className="flex-1 px-6 py-3 bg-wood-accent hover:bg-wood-accent-hover disabled:bg-wood-accent/50 text-wood-accent-ink font-medium rounded-sm transition-colors"
         >
           {loading ? '저장 중...' : '저장'}
         </button>
         <button
           type="button"
           onClick={handleCancel}
-          className="flex-1 px-6 py-3 border border-gray-300 dark:border-gray-600 text-black dark:text-white font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
+          className="flex-1 px-6 py-3 border border-wood-border-strong text-wood-ink font-medium rounded-sm hover:bg-wood-bg transition-colors"
         >
           취소
         </button>

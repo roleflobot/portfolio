@@ -47,30 +47,30 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-black items-center justify-center px-6">
+    <div className="flex flex-col min-h-screen bg-wood-bg items-center justify-center px-6">
       <div className="w-full max-w-sm">
-        <h1 className="text-3xl font-bold text-black dark:text-white mb-2 text-center">
+        <h1 className="text-3xl font-bold text-wood-ink mb-2 text-center">
           🍜 평양냉면 혼밥 도장깨기
         </h1>
-        <p className="text-zinc-600 dark:text-zinc-400 text-center mb-8">
+        <p className="text-wood-muted text-center mb-8">
           {mode === 'login' ? '로그인하고 나만의 목록을 관리하세요' : '회원가입하고 시작하세요'}
         </p>
 
-        <div className="bg-white dark:bg-zinc-900 rounded-lg shadow-md p-8">
+        <div className="bg-wood-surface border-t-4 border-wood-wood rounded-sm shadow-md p-8">
           {error && (
-            <div className="p-3 mb-4 bg-red-100 dark:bg-red-900 rounded-lg border border-red-400 dark:border-red-700">
-              <p className="text-red-800 dark:text-red-100 text-sm">{error}</p>
+            <div className="p-3 mb-4 bg-wood-error-bg rounded-sm border border-wood-error-border">
+              <p className="text-wood-error-ink text-sm">{error}</p>
             </div>
           )}
           {message && (
-            <div className="p-3 mb-4 bg-emerald-100 dark:bg-emerald-900 rounded-lg border border-emerald-400 dark:border-emerald-700">
-              <p className="text-emerald-800 dark:text-emerald-100 text-sm">{message}</p>
+            <div className="p-3 mb-4 bg-wood-success-bg rounded-sm border border-wood-success-border">
+              <p className="text-wood-success-ink text-sm">{message}</p>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-black dark:text-white mb-2">
+              <label className="block text-sm font-medium text-wood-ink mb-2">
                 이메일
               </label>
               <input
@@ -79,11 +79,11 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="you@example.com"
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-zinc-800 text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-wood-border-strong rounded-sm bg-wood-surface text-wood-ink placeholder-wood-muted focus:outline-none focus:ring-2 focus:ring-wood-accent"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-black dark:text-white mb-2">
+              <label className="block text-sm font-medium text-wood-ink mb-2">
                 비밀번호
               </label>
               <input
@@ -93,13 +93,13 @@ export default function LoginPage() {
                 required
                 minLength={6}
                 placeholder="6자 이상"
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-zinc-800 text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-wood-border-strong rounded-sm bg-wood-surface text-wood-ink placeholder-wood-muted focus:outline-none focus:ring-2 focus:ring-wood-accent"
               />
             </div>
             <button
               type="submit"
               disabled={loading}
-              className="w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium rounded-lg transition-colors"
+              className="w-full px-6 py-3 bg-wood-accent hover:bg-wood-accent-hover disabled:bg-wood-accent/50 text-wood-accent-ink font-medium rounded-sm transition-colors"
             >
               {loading ? '처리 중...' : mode === 'login' ? '로그인' : '회원가입'}
             </button>
@@ -111,7 +111,7 @@ export default function LoginPage() {
               setError(null)
               setMessage(null)
             }}
-            className="w-full mt-4 text-sm text-zinc-600 dark:text-zinc-400 hover:underline"
+            className="w-full mt-4 text-sm text-wood-muted hover:underline"
           >
             {mode === 'login' ? '계정이 없나요? 회원가입' : '이미 계정이 있나요? 로그인'}
           </button>

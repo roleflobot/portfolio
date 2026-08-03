@@ -38,10 +38,10 @@ export default function VisitedToggle({ id, visited, onChange }: VisitedTogglePr
     <button
       onClick={handleToggle}
       disabled={loading}
-      className={`px-6 py-3 font-medium rounded-lg transition-colors ${
+      className={`px-6 py-3 font-medium rounded-sm transition-colors ${
         visited
-          ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
-          : 'border border-gray-300 dark:border-gray-600 text-black dark:text-white hover:bg-gray-100 dark:hover:bg-zinc-800'
+          ? 'bg-wood-sage hover:bg-wood-sage-hover text-wood-accent-ink'
+          : 'border border-wood-border-strong text-wood-ink hover:bg-wood-bg'
       }`}
     >
       {loading ? '처리 중...' : visited ? '✅ 다녀왔어요' : '다녀왔어요'}

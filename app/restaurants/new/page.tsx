@@ -11,18 +11,18 @@ export default function NewRestaurantPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-black">
+    <div className="flex flex-col min-h-screen bg-wood-bg">
       <main className="flex-1 max-w-2xl mx-auto w-full px-6 py-12">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-black dark:text-white mb-2">
+          <h1 className="text-4xl font-bold text-wood-ink mb-2">
             새 맛집 등록
           </h1>
-          <p className="text-lg text-zinc-600 dark:text-zinc-400">
+          <p className="text-lg text-wood-muted">
             발견한 맛집을 추천해주세요
           </p>
         </div>
 
-        <div className="bg-white dark:bg-zinc-900 rounded-lg shadow-md p-8">
+        <div className="bg-wood-surface border-t-4 border-wood-wood rounded-sm shadow-md p-8">
           <RestaurantForm />
         </div>
       </main>

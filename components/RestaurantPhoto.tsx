@@ -88,13 +88,17 @@ export default function RestaurantPhoto({
         <img
           src={photoUrl}
           alt="식당 사진"
-          className={`${imageSizeClass} object-cover rounded-lg`}
+          className={`${imageSizeClass} object-cover rounded-sm border border-wood-border-strong`}
         />
       ) : (
         <div
-          className={`${imageSizeClass} rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center`}
+          className={`${imageSizeClass} rounded-sm border-2 border-dashed border-wood-border-strong bg-wood-bg flex items-center justify-center`}
+          style={{
+            backgroundImage:
+              'repeating-linear-gradient(100deg, rgba(139,107,74,0.08) 0 2px, transparent 2px 12px)',
+          }}
         >
-          <span className="text-xs text-zinc-400 text-center px-1">사진 없음</span>
+          <span className="text-xs text-wood-muted text-center px-1">사진 없음</span>
         </div>
       )}
 
@@ -109,13 +113,13 @@ export default function RestaurantPhoto({
         type="button"
         onClick={() => inputRef.current?.click()}
         disabled={uploading}
-        className={`mt-2 w-full border border-gray-300 dark:border-gray-600 text-black dark:text-white font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors disabled:opacity-50 ${
+        className={`mt-2 w-full border border-wood-border-strong text-wood-ink font-medium rounded-sm hover:bg-wood-bg transition-colors disabled:opacity-50 ${
           compact ? 'px-2 py-1 text-xs' : 'px-4 py-2 text-sm'
         }`}
       >
         {uploading ? '업로드 중...' : photoUrl ? '사진 변경' : '사진 업로드'}
       </button>
-      {error && <p className="mt-2 text-xs text-red-600 dark:text-red-400">{error}</p>}
+      {error && <p className="mt-2 text-xs text-wood-danger">{error}</p>}
     </div>
   )
 }

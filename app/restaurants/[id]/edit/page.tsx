@@ -48,9 +48,9 @@ export default function EditRestaurantPage() {
 
   if (!session || loading) {
     return (
-      <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-black">
+      <div className="flex flex-col min-h-screen bg-wood-bg">
         <main className="flex-1 max-w-2xl mx-auto w-full px-6 py-12">
-          <p className="text-center text-zinc-600 dark:text-zinc-400">로딩 중...</p>
+          <p className="text-center text-wood-muted">로딩 중...</p>
         </main>
       </div>
     )
@@ -58,9 +58,9 @@ export default function EditRestaurantPage() {
 
   if (error || !restaurant) {
     return (
-      <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-black">
+      <div className="flex flex-col min-h-screen bg-wood-bg">
         <main className="flex-1 max-w-2xl mx-auto w-full px-6 py-12">
-          <p className="text-center text-red-600 dark:text-red-400">
+          <p className="text-center text-wood-danger">
             {error || '식당을 찾을 수 없습니다.'}
           </p>
         </main>
@@ -69,18 +69,18 @@ export default function EditRestaurantPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-black">
+    <div className="flex flex-col min-h-screen bg-wood-bg">
       <main className="flex-1 max-w-2xl mx-auto w-full px-6 py-12">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-black dark:text-white mb-2">
+          <h1 className="text-3xl font-bold text-wood-ink mb-2">
             맛집 수정
           </h1>
-          <p className="text-zinc-600 dark:text-zinc-400">
+          <p className="text-wood-muted">
             {restaurant.name} 정보를 수정합니다
           </p>
         </div>
 
-        <div className="bg-white dark:bg-zinc-900 rounded-lg shadow-md p-8">
+        <div className="bg-wood-surface border-t-4 border-wood-wood rounded-sm shadow-md p-8">
           <RestaurantForm
             isEditing
             initialData={{

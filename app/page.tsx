@@ -80,27 +80,27 @@ export default function Home() {
       : null
 
   return (
-    <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-black">
+    <div className="flex flex-col min-h-screen bg-wood-bg">
       <main className="flex-1 max-w-4xl mx-auto w-full px-6 py-12">
         <div className="flex items-start justify-between mb-8">
           <div>
-            <h1 className="text-4xl font-bold text-black dark:text-white mb-2">
+            <h1 className="text-4xl font-bold text-wood-ink mb-2">
               🍜 평양냉면 혼밥 도장깨기
             </h1>
-            <p className="text-lg text-zinc-600 dark:text-zinc-400">
+            <p className="text-lg text-wood-muted">
               서울의 평양냉면집을 저장하고 혼밥 도장을 깨보세요
             </p>
           </div>
           <div className="flex gap-2">
             <Link
               href="/restaurants/new"
-              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors whitespace-nowrap"
+              className="px-6 py-3 bg-wood-accent hover:bg-wood-accent-hover text-wood-accent-ink font-medium rounded-sm transition-colors whitespace-nowrap"
             >
               + 식당 등록
             </Link>
             <button
               onClick={handleLogout}
-              className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-black dark:text-white font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors whitespace-nowrap"
+              className="px-6 py-3 border border-wood-border-strong text-wood-ink font-medium rounded-sm hover:bg-wood-surface transition-colors whitespace-nowrap"
             >
               로그아웃
             </button>
@@ -108,8 +108,8 @@ export default function Home() {
         </div>
 
         {averagePrice !== null && (
-          <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-4">
-            평균 냉면 가격 <span className="font-semibold text-black dark:text-white">{averagePrice.toLocaleString()}원</span>
+          <p className="text-sm text-wood-muted mb-4">
+            평균 냉면 가격 <span className="font-semibold text-wood-ink">{averagePrice.toLocaleString()}원</span>
             {' '}({pricedRestaurants.length}곳 기준)
           </p>
         )}
@@ -117,30 +117,30 @@ export default function Home() {
         <div className="flex gap-2 mb-6">
           <button
             onClick={() => setTab('all')}
-            className={`px-5 py-2 rounded-lg font-medium transition-colors ${
+            className={`px-5 py-2 rounded-sm font-medium transition-colors ${
               tab === 'all'
-                ? 'bg-blue-600 text-white'
-                : 'bg-white dark:bg-zinc-900 text-black dark:text-white border border-gray-300 dark:border-gray-600'
+                ? 'bg-wood-wood text-wood-surface'
+                : 'bg-wood-surface text-wood-ink border border-wood-border-strong'
             }`}
           >
             전체
           </button>
           <button
             onClick={() => setTab('want')}
-            className={`px-5 py-2 rounded-lg font-medium transition-colors ${
+            className={`px-5 py-2 rounded-sm font-medium transition-colors ${
               tab === 'want'
-                ? 'bg-blue-600 text-white'
-                : 'bg-white dark:bg-zinc-900 text-black dark:text-white border border-gray-300 dark:border-gray-600'
+                ? 'bg-wood-wood text-wood-surface'
+                : 'bg-wood-surface text-wood-ink border border-wood-border-strong'
             }`}
           >
             가고 싶은 곳
           </button>
           <button
             onClick={() => setTab('visited')}
-            className={`px-5 py-2 rounded-lg font-medium transition-colors ${
+            className={`px-5 py-2 rounded-sm font-medium transition-colors ${
               tab === 'visited'
-                ? 'bg-blue-600 text-white'
-                : 'bg-white dark:bg-zinc-900 text-black dark:text-white border border-gray-300 dark:border-gray-600'
+                ? 'bg-wood-wood text-wood-surface'
+                : 'bg-wood-surface text-wood-ink border border-wood-border-strong'
             }`}
           >
             다녀온 곳
@@ -151,7 +151,7 @@ export default function Home() {
           <select
             value={district}
             onChange={(e) => setDistrict(e.target.value)}
-            className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-zinc-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-wood-border-strong rounded-sm bg-wood-surface text-wood-ink focus:outline-none focus:ring-2 focus:ring-wood-accent"
           >
             <option value="">전체 자치구</option>
             {SEOUL_DISTRICTS.map((d) => (
@@ -165,17 +165,17 @@ export default function Home() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="식당명 검색"
-            className="flex-1 min-w-[200px] px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-zinc-800 text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-1 min-w-[200px] px-4 py-2 border border-wood-border-strong rounded-sm bg-wood-surface text-wood-ink placeholder-wood-muted focus:outline-none focus:ring-2 focus:ring-wood-accent"
           />
         </div>
 
         {loading ? (
           <div className="text-center py-12">
-            <p className="text-zinc-600 dark:text-zinc-400">로딩 중...</p>
+            <p className="text-wood-muted">로딩 중...</p>
           </div>
         ) : filteredRestaurants.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-wood-muted">
               {tab === 'all'
                 ? '등록된 식당이 없습니다.'
                 : tab === 'want'
@@ -188,33 +188,33 @@ export default function Home() {
             {filteredRestaurants.map((restaurant) => (
               <div
                 key={restaurant.id}
-                className="bg-white dark:bg-zinc-900 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow flex flex-col"
+                className="bg-wood-surface border border-wood-border rounded-sm shadow-md p-6 hover:shadow-lg transition-shadow flex flex-col"
               >
                 <div className="flex items-start justify-between mb-4">
-                  <h2 className="text-xl font-semibold text-black dark:text-white">
+                  <h2 className="text-xl font-semibold text-wood-ink">
                     {restaurant.name}
                   </h2>
                   {restaurant.rating && (
-                    <div className="bg-yellow-100 dark:bg-yellow-900 px-3 py-1 rounded-full">
-                      <span className="text-sm font-medium text-yellow-800 dark:text-yellow-100">
+                    <div className="bg-wood-badge-bg px-3 py-1 rounded-sm">
+                      <span className="text-sm font-medium text-wood-badge-ink">
                         ⭐ {restaurant.rating}
                       </span>
                     </div>
                   )}
                 </div>
-                <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-1">
+                <p className="text-sm text-wood-muted mb-1">
                   {restaurant.district}
                 </p>
-                <p className="text-lg text-zinc-700 dark:text-zinc-300 mb-2">
+                <p className="text-lg text-wood-ink mb-2">
                   🍜 {restaurant.food}
                   {restaurant.price ? ` · ${restaurant.price.toLocaleString()}원` : ''}
                 </p>
-                <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-4">
+                <p className="text-sm text-wood-muted mb-4">
                   {restaurant.solo_status}
                 </p>
                 <Link
                   href={`/restaurants/${restaurant.id}`}
-                  className="mt-auto text-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-black dark:text-white text-sm font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
+                  className="mt-auto text-center px-4 py-2 border border-wood-border-strong text-wood-ink text-sm font-medium rounded-sm hover:bg-wood-bg transition-colors"
                 >
                   상세보기
                 </Link>

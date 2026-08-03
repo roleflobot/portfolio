@@ -3,6 +3,30 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* 목가구 서재 팔레트 (라이트) */
+  --wood-bg: #efe6d2;
+  --wood-surface: #fbf6ea;
+  --wood-ink: #3b2e22;
+  --wood-muted: #8a7860;
+  --wood-border: #e2d5bc;
+  --wood-border-strong: #d8c6a4;
+  --wood-accent: #b5754f;
+  --wood-accent-hover: #9c6440;
+  --wood-accent-ink: #fbf6ea;
+  --wood-sage: #889b7b;
+  --wood-sage-hover: #748568;
+  --wood-danger: #a15a3e;
+  --wood-danger-hover: #8b4a32;
+  --wood-wood: #8b6b4a;
+  --wood-badge-bg: #f2e8d4;
+  --wood-badge-ink: #8b6b4a;
+  --wood-error-bg: #f3ddd3;
+  --wood-error-ink: #7a3c28;
+  --wood-error-border: #d9af9b;
+  --wood-success-bg: #e3ebdd;
+  --wood-success-ink: #3f5236;
+  --wood-success-border: #b9cba9;
 }
 
 @theme inline {
@@ -10,17 +34,64 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --color-wood-bg: var(--wood-bg);
+  --color-wood-surface: var(--wood-surface);
+  --color-wood-ink: var(--wood-ink);
+  --color-wood-muted: var(--wood-muted);
+  --color-wood-border: var(--wood-border);
+  --color-wood-border-strong: var(--wood-border-strong);
+  --color-wood-accent: var(--wood-accent);
+  --color-wood-accent-hover: var(--wood-accent-hover);
+  --color-wood-accent-ink: var(--wood-accent-ink);
+  --color-wood-sage: var(--wood-sage);
+  --color-wood-sage-hover: var(--wood-sage-hover);
+  --color-wood-danger: var(--wood-danger);
+  --color-wood-danger-hover: var(--wood-danger-hover);
+  --color-wood-wood: var(--wood-wood);
+  --color-wood-badge-bg: var(--wood-badge-bg);
+  --color-wood-badge-ink: var(--wood-badge-ink);
+  --color-wood-error-bg: var(--wood-error-bg);
+  --color-wood-error-ink: var(--wood-error-ink);
+  --color-wood-error-border: var(--wood-error-border);
+  --color-wood-success-bg: var(--wood-success-bg);
+  --color-wood-success-ink: var(--wood-success-ink);
+  --color-wood-success-border: var(--wood-success-border);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+
+    /* 목가구 서재 팔레트 (다크 — 밤의 서재) */
+    --wood-bg: #1e1712;
+    --wood-surface: #2a2018;
+    --wood-ink: #efe4d2;
+    --wood-muted: #b3a28a;
+    --wood-border: #4a3b2a;
+    --wood-border-strong: #5c4a34;
+    --wood-accent: #c97f52;
+    --wood-accent-hover: #b56c42;
+    --wood-accent-ink: #2a1c10;
+    --wood-sage: #9fb08f;
+    --wood-sage-hover: #8a9c7c;
+    --wood-danger: #c97a5c;
+    --wood-danger-hover: #b4674a;
+    --wood-wood: #9c7c55;
+    --wood-badge-bg: #3a2e1f;
+    --wood-badge-ink: #d9b384;
+    --wood-error-bg: #3a2620;
+    --wood-error-ink: #e8b8a2;
+    --wood-error-border: #5c3a2c;
+    --wood-success-bg: #2a331f;
+    --wood-success-ink: #c4d6b0;
+    --wood-success-border: #445236;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--wood-bg);
+  color: var(--wood-ink);
+  font-family: "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", Arial, sans-serif;
 }
