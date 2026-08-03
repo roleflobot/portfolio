@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { SEOUL_DISTRICTS } from '@/lib/districts'
 import { authFetch } from '@/lib/authFetch'
 import { SOLO_STATUS_VALUES } from '@/lib/soloStatus'
+import NaverPlaceFinder, { type NaverPlaceFields } from '@/components/NaverPlaceFinder'
 
 interface RestaurantFormProps {
   initialData?: {
@@ -15,6 +16,12 @@ interface RestaurantFormProps {
     price: number
     solo_status: string
     map_url: string
+    naver_place_name?: string
+    naver_category?: string
+    naver_road_address?: string
+    naver_mapx?: number | null
+    naver_mapy?: number | null
+    naver_link_source?: string
   }
   isEditing?: boolean
 }
@@ -34,6 +41,12 @@ export default function RestaurantForm({
     price: initialData?.price || 0,
     solo_status: initialData?.solo_status || '미확인',
     map_url: initialData?.map_url || '',
+    naver_place_name: initialData?.naver_place_name || '',
+    naver_category: initialData?.naver_category || '',
+    naver_road_address: initialData?.naver_road_address || '',
+    naver_mapx: initialData?.naver_mapx ?? null,
+    naver_mapy: initialData?.naver_mapy ?? null,
+    naver_link_source: (initialData?.naver_link_source || '') as NaverPlaceFields['naver_link_source'],
   })
 
   const handleChange = (
@@ -206,13 +219,20 @@ export default function RestaurantForm({
         <label className={labelClass}>
           네이버 지도 링크
         </label>
-        <input
-          type="text"
-          name="map_url"
-          value={formData.map_url}
-          onChange={handleChange}
-          placeholder="예: https://map.naver.com/..."
-          className={inputClass}
+        <NaverPlaceFinder
+          name={formData.name}
+          address={formData.address}
+          district={formData.district}
+          value={{
+            map_url: formData.map_url,
+            naver_place_name: formData.naver_place_name,
+            naver_category: formData.naver_category,
+            naver_road_address: formData.naver_road_address,
+            naver_mapx: formData.naver_mapx,
+            naver_mapy: formData.naver_mapy,
+            naver_link_source: formData.naver_link_source,
+          }}
+          onChange={(fields) => setFormData((prev) => ({ ...prev, ...fields }))}
         />
       </div>
 

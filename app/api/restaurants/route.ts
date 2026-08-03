@@ -55,7 +55,20 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
 
     // 입력값 검증
-    const { name, district, address, price, solo_status, map_url } = body
+    const {
+      name,
+      district,
+      address,
+      price,
+      solo_status,
+      map_url,
+      naver_place_name,
+      naver_category,
+      naver_road_address,
+      naver_mapx,
+      naver_mapy,
+      naver_link_source,
+    } = body
 
     // 필수 필드 검증
     if (!name || typeof name !== 'string' || !name.trim()) {
@@ -121,6 +134,12 @@ export async function POST(request: NextRequest) {
           price: price || null,
           solo_status: solo_status || '미확인',
           map_url: resolvedMapUrl,
+          naver_place_name: naver_place_name?.trim() || null,
+          naver_category: naver_category?.trim() || null,
+          naver_road_address: naver_road_address?.trim() || null,
+          naver_mapx: typeof naver_mapx === 'number' ? naver_mapx : null,
+          naver_mapy: typeof naver_mapy === 'number' ? naver_mapy : null,
+          naver_link_source: naver_link_source || null,
           user_id: user.id,
         },
       ])
