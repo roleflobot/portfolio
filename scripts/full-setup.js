@@ -53,8 +53,21 @@ async function fullSetup() {
       console.log('⚠️  스키마 마이그레이션 이미 완료됨');
     }
 
-    // Step 2: 초기 데이터 추가
-    console.log('\n📊 Step 2: 평양냉면 초기 데이터 추가...');
+    // Step 2: 기존 데이터 모두 삭제
+    console.log('\n🗑️  Step 2: 기존 데이터 삭제 중...');
+
+    try {
+      await supabase
+        .from('restaurants')
+        .delete()
+        .neq('id', '00000000-0000-0000-0000-000000000000');
+      console.log('✅ 기존 데이터 삭제 완료');
+    } catch (error) {
+      console.log('⚠️  데이터 삭제 스킵');
+    }
+
+    // Step 3: 평양냉면 초기 데이터 추가
+    console.log('\n📊 Step 3: 평양냉면 초기 데이터 추가...');
 
     const testUserId = '550e8400-e29b-41d4-a716-446655440000';
 
