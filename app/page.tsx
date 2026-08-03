@@ -190,18 +190,16 @@ export default function Home() {
                 key={restaurant.id}
                 className="bg-wood-surface border border-wood-border rounded-sm shadow-md p-6 hover:shadow-lg transition-shadow flex flex-col"
               >
-                <div className="flex items-start justify-between mb-4">
-                  <h2 className="text-xl font-semibold text-wood-ink">
-                    {restaurant.name}
-                  </h2>
-                  {restaurant.rating && (
-                    <div className="bg-wood-badge-bg px-3 py-1 rounded-sm">
-                      <span className="text-sm font-medium text-wood-badge-ink">
-                        ⭐ {restaurant.rating}
-                      </span>
-                    </div>
-                  )}
-                </div>
+                <h2 className="text-xl font-semibold text-wood-ink mb-2">
+                  {restaurant.name}
+                </h2>
+                {restaurant.rating && (
+                  <div className="mb-3">
+                    <span className="inline-block bg-wood-badge-bg px-3 py-1 rounded-sm text-sm font-medium text-wood-badge-ink">
+                      ⭐ {restaurant.rating}
+                    </span>
+                  </div>
+                )}
                 <p className="text-sm text-wood-muted mb-1">
                   {restaurant.district}
                 </p>
