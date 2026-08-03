@@ -86,7 +86,9 @@ export async function findSeoulCandidates(
   inputAddress: string,
   inputDistrict: string
 ): Promise<MatchCandidate[]> {
-  const query = `${inputName} ${inputAddress || inputDistrict}`.trim()
+  // 주소에 '지하1층', '3층' 같은 층/호수 정보가 섞이면 네이버 지역검색 API가
+  // 0건을 반환하는 경우가 있어(실측 확인됨), 검색어는 상세 주소 대신 자치구를 사용한다.
+  const query = `${inputName} ${inputDistrict}`.trim()
   const items = await searchNaverLocal(query)
   const seoulItems = items.filter(isSeoulAddress)
 
