@@ -35,9 +35,14 @@ export function isSeoulAddress(item: Pick<RawNaverItem, 'address' | 'roadAddress
   return (item.address || '').includes('서울특별시') || (item.roadAddress || '').includes('서울특별시')
 }
 
-export function buildWebSearchUrl(placeName: string): string {
-  // 상호명만으로 검색하면 동명의 다른 업종 업체가 같이 뜨는 경우가 있어 '냉면'을 붙여 정확도를 높인다
-  return `https://map.naver.com/p/search/${encodeURIComponent(`${placeName} 냉면`)}`
+/**
+ * 도로명주소가 있으면 주소로, 없으면 상호명+'냉면'으로 검색 링크를 만든다.
+ * 상호명만으로 검색하면 이름이 겹치는 다른 지역·업종 업체가 같이 나오는 경우가 있어,
+ * 주소(고유 지점)가 있을 때는 그쪽이 훨씬 정확하다.
+ */
+export function buildWebSearchUrl(addressOrName: string, isAddress = false): string {
+  const query = isAddress ? addressOrName : `${addressOrName} 냉면`
+  return `https://map.naver.com/p/search/${encodeURIComponent(query)}`
 }
 
 export function buildNmapUrl(lat: number, lng: number, placeName: string): string {
@@ -115,7 +120,9 @@ export async function findSeoulCandidates(
       nameMatch,
       addressMatch,
       score: (nameMatch ? 2 : 0) + (addressMatch ? 1 : 0),
-      mapUrl: buildWebSearchUrl(cleanName),
+      mapUrl: item.roadAddress
+        ? buildWebSearchUrl(item.roadAddress, true)
+        : buildWebSearchUrl(cleanName, false),
       nmapUrl: buildNmapUrl(lat, lng, cleanName),
     }
   })

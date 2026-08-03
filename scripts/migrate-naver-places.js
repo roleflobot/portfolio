@@ -60,8 +60,9 @@ function isSeoulAddress(item) {
   return (item.address || '').includes('서울특별시') || (item.roadAddress || '').includes('서울특별시');
 }
 
-function buildWebSearchUrl(placeName) {
-  return 'https://map.naver.com/p/search/' + encodeURIComponent(placeName + ' 냉면');
+function buildWebSearchUrl(addressOrName, isAddress) {
+  const query = isAddress ? addressOrName : addressOrName + ' 냉면';
+  return 'https://map.naver.com/p/search/' + encodeURIComponent(query);
 }
 
 function buildNmapUrl(lat, lng, placeName) {
@@ -185,7 +186,9 @@ async function main() {
       }
 
       const nmapUrl = buildNmapUrl(best.lat, best.lng, best.name);
-      const webUrl = buildWebSearchUrl(best.name);
+      const webUrl = best.roadAddress
+        ? buildWebSearchUrl(best.roadAddress, true)
+        : buildWebSearchUrl(best.name, false);
 
       console.log(
         `✨ [${r.id}] ${r.name} -> ${best.name} | ${best.roadAddress || best.address} | ${best.category} | score=${best.score}`
