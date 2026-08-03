@@ -1,5 +1,6 @@
 import { getRequestUser } from '@/lib/supabase-server'
 import { SOLO_STATUS_VALUES } from '@/lib/soloStatus'
+import { searchNaverPlace } from '@/lib/naverLocalSearch'
 import { NextResponse, NextRequest } from 'next/server'
 
 export async function GET(
@@ -82,6 +83,20 @@ export async function PUT(
       }
     }
 
+    const { data: existing } = await supabase
+      .from('restaurants')
+      .select('name, lat, lng')
+      .eq('id', id)
+      .single()
+
+    let lat = existing?.lat ?? null
+    let lng = existing?.lng ?? null
+    if (!existing || existing.name !== name.trim()) {
+      const place = await searchNaverPlace(`${name.trim()} 냉면`)
+      lat = place?.lat ?? null
+      lng = place?.lng ?? null
+    }
+
     const { data, error } = await supabase
       .from('restaurants')
       .update({
@@ -91,6 +106,8 @@ export async function PUT(
         price: price || null,
         solo_status: solo_status || '미확인',
         map_url: map_url?.trim() || null,
+        lat,
+        lng,
       })
       .eq('id', id)
       .select()

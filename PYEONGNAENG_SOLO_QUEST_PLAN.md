@@ -50,7 +50,11 @@
 - **Database / Auth**: Supabase
 - **Styling**: Tailwind CSS
 - **Deployment**: Vercel
-- **Map**: 지도 API를 삽입하지 않고 외부 네이버 지도 링크만 제공
+- **Map**: NAVER Cloud Platform의 지역 검색 API와 Maps JavaScript SDK를 적극 활용한다.
+  - 지역 검색 API로 식당명 기준 정확한 도로명주소·좌표(lat/lng)를 조회해 등록 시 저장한다.
+  - 상세 화면에는 해당 좌표를 이용한 작은 지도 미리보기(마커 1개)를 띄운다.
+  - 전체 화면 지도, 여러 식당을 한 지도에 표시하는 기능은 만들지 않는다.
+  - 외부 네이버 지도 링크(전체 상세정보 확인용)도 함께 제공한다.
 
 ### 개발 원칙
 
@@ -107,6 +111,7 @@ Markdown에서 표시하려면:
 - 방문 여부
 - 개인 별점
 - 메모
+- 미니 지도(좌표 기반 마커 1개 미리보기)
 - `[네이버 지도에서 보기]`
 - `[목록]`
 - `[수정]`
@@ -155,6 +160,8 @@ restaurants
   rating           개인 별점 (1~5, 안 갔으면 비움)
   memo             혼밥 경험 및 한 줄 메모
   map_url          네이버 지도 링크
+  lat              위도 (네이버 지역 검색 API 조회 결과)
+  lng              경도 (네이버 지역 검색 API 조회 결과)
   user_id          누가 등록했는지
   created_at       (자동)
 ```
@@ -173,6 +180,8 @@ create table restaurants (
   rating integer check (rating between 1 and 5),
   memo text,
   map_url text,
+  lat double precision,
+  lng double precision,
   user_id uuid not null references auth.users(id) on delete cascade,
   created_at timestamptz not null default now()
 );
@@ -362,9 +371,7 @@ components/
 
 이번 MVP에서는 다음 기능을 구현하지 않는다.
 
-- 앱 내부 지도 API
-- 지도 위 다중 마커
-- 네이버 지도 자동 검색
+- 여러 식당을 한 지도에 동시에 표시하는 전체 지도 화면 (마커 1개짜리 상세 미니 지도는 사용함)
 - 웹 크롤링 및 실시간 정보 수집
 - 사진 업로드
 - 댓글 및 공개 리뷰
