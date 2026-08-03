@@ -67,10 +67,11 @@ export async function POST(request: NextRequest) {
       .insert([
         {
           name: name.trim(),
+          food: '음식',
           district: district.trim(),
           address: address?.trim() || null,
           price: price || 0,
-          solo_status: solo_status || false,
+          solo_status: solo_status ? '가능' : '미확인',
         },
       ])
       .select()

@@ -1,0 +1,9 @@
+-- Pyeongnaeng restaurants 테이블 스키마 업데이트
+ALTER TABLE restaurants ADD COLUMN IF NOT EXISTS district TEXT;
+ALTER TABLE restaurants ADD COLUMN IF NOT EXISTS address TEXT;
+ALTER TABLE restaurants ADD COLUMN IF NOT EXISTS price INTEGER;
+ALTER TABLE restaurants ADD COLUMN IF NOT EXISTS solo_status TEXT DEFAULT '미확인';
+ALTER TABLE restaurants ADD COLUMN IF NOT EXISTS visited BOOLEAN DEFAULT false;
+ALTER TABLE restaurants ADD COLUMN IF NOT EXISTS memo TEXT;
+ALTER TABLE restaurants ADD COLUMN IF NOT EXISTS map_url TEXT;
+ALTER TABLE restaurants ADD COLUMN IF NOT EXISTS user_id UUID;

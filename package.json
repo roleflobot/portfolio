@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "setup": "node scripts/full-setup.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.0",
