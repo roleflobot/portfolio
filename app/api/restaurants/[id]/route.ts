@@ -130,7 +130,7 @@ export async function PATCH(
     }
 
     const body = await request.json()
-    const { visited, rating, memo } = body
+    const { visited, rating, memo, photo_url } = body
 
     const update: Record<string, unknown> = {}
 
@@ -169,6 +169,20 @@ export async function PATCH(
 
     if (memo !== undefined) {
       update.memo = typeof memo === 'string' ? memo.trim() || null : null
+    }
+
+    if (photo_url !== undefined) {
+      if (photo_url !== null && typeof photo_url === 'string') {
+        try {
+          new URL(photo_url)
+        } catch {
+          return NextResponse.json(
+            { error: '사진 URL 형식이 올바르지 않습니다.' },
+            { status: 400 }
+          )
+        }
+      }
+      update.photo_url = photo_url
     }
 
     if (Object.keys(update).length === 0) {

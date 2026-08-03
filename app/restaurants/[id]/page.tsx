@@ -5,6 +5,7 @@ import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
 import VisitedToggle from '@/components/VisitedToggle'
 import RatingInput from '@/components/RatingInput'
+import RestaurantPhoto from '@/components/RestaurantPhoto'
 import { authFetch } from '@/lib/authFetch'
 import { useAuthGuard } from '@/lib/useAuthGuard'
 
@@ -19,6 +20,7 @@ interface Restaurant {
   rating: number | null
   memo: string | null
   map_url: string | null
+  photo_url: string | null
 }
 
 export default function RestaurantDetailPage() {
@@ -131,7 +133,8 @@ export default function RestaurantDetailPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-black">
-      <main className="flex-1 max-w-2xl mx-auto w-full px-6 py-12">
+      <main className="flex-1 max-w-4xl mx-auto w-full px-6 py-12">
+        <div className="grid gap-6 md:grid-cols-[1fr_320px] items-start">
         <div className="bg-white dark:bg-zinc-900 rounded-lg shadow-md p-8 space-y-6">
           <div>
             <h1 className="text-3xl font-bold text-black dark:text-white mb-1">
@@ -239,6 +242,17 @@ export default function RestaurantDetailPage() {
               {deleting ? '삭제 중...' : '삭제'}
             </button>
           </div>
+        </div>
+
+        <div className="bg-white dark:bg-zinc-900 rounded-lg shadow-md p-4 md:sticky md:top-8">
+          <RestaurantPhoto
+            id={restaurant.id}
+            photoUrl={restaurant.photo_url}
+            onChange={(photo_url) =>
+              setRestaurant((prev) => (prev ? { ...prev, photo_url } : prev))
+            }
+          />
+        </div>
         </div>
       </main>
     </div>

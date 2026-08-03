@@ -107,6 +107,7 @@ Markdown에서 표시하려면:
 - 방문 여부
 - 개인 별점
 - 메모
+- 사진 (본인만 업로드/변경 가능, 1장)
 - `[네이버 지도에서 보기]`
 - `[목록]`
 - `[수정]`
@@ -155,9 +156,12 @@ restaurants
   rating           개인 별점 (1~5, 안 갔으면 비움)
   memo             혼밥 경험 및 한 줄 메모
   map_url          네이버 지도 링크
+  photo_url        업로드한 사진 (Supabase Storage 공개 URL)
   user_id          누가 등록했는지
   created_at       (자동)
 ```
+
+사진은 Supabase Storage의 `restaurant-photos` 버킷(공개 읽기)에 `{user_id}/{restaurant_id}-*.jpg` 형태 경로로 저장한다. 본인 소유 경로에만 업로드·수정·삭제할 수 있도록 스토리지 정책을 둔다.
 
 ### 권장 SQL
 
@@ -366,7 +370,6 @@ components/
 - 지도 위 다중 마커
 - 네이버 지도 자동 검색
 - 웹 크롤링 및 실시간 정보 수집
-- 사진 업로드
 - 댓글 및 공개 리뷰
 - 팔로우·친구·공유 기능
 - AI 맛집 추천
