@@ -101,6 +101,14 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // 지도 링크: 직접 입력한 링크 > 주소 기반 검색 > 식당명+냉면 검색 순으로 사용한다
+    const trimmedAddress = address?.trim()
+    const resolvedMapUrl =
+      map_url?.trim() ||
+      `https://map.naver.com/p/search/${encodeURIComponent(
+        trimmedAddress || `${name.trim()} 냉면`
+      )}`
+
     // Supabase에 저장
     const { data, error } = await supabase
       .from('restaurants')
@@ -109,10 +117,10 @@ export async function POST(request: NextRequest) {
           name: name.trim(),
           food: '평양냉면',
           district: district.trim(),
-          address: address?.trim() || null,
+          address: trimmedAddress || null,
           price: price || null,
           solo_status: solo_status || '미확인',
-          map_url: map_url?.trim() || null,
+          map_url: resolvedMapUrl,
           user_id: user.id,
         },
       ])

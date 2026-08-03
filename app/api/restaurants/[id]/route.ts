@@ -82,15 +82,23 @@ export async function PUT(
       }
     }
 
+    // 지도 링크: 직접 입력한 링크가 있으면 그대로 두고, 비어있을 때만 주소 > 식당명+냉면 순으로 새로 만든다
+    const trimmedAddress = address?.trim()
+    const resolvedMapUrl =
+      map_url?.trim() ||
+      `https://map.naver.com/p/search/${encodeURIComponent(
+        trimmedAddress || `${name.trim()} 냉면`
+      )}`
+
     const { data, error } = await supabase
       .from('restaurants')
       .update({
         name: name.trim(),
         district: district.trim(),
-        address: address?.trim() || null,
+        address: trimmedAddress || null,
         price: price || null,
         solo_status: solo_status || '미확인',
-        map_url: map_url?.trim() || null,
+        map_url: resolvedMapUrl,
       })
       .eq('id', id)
       .select()
