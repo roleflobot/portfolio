@@ -161,11 +161,10 @@ export default function RestaurantDetailPage() {
                 <dd className="text-black dark:text-white">{restaurant.solo_status}</dd>
               </div>
             </dl>
-            <div className="w-32 flex-shrink-0">
+            <div className="w-64 flex-shrink-0">
               <RestaurantPhoto
                 id={restaurant.id}
                 photoUrl={restaurant.photo_url}
-                compact
                 onChange={(photo_url) =>
                   setRestaurant((prev) => (prev ? { ...prev, photo_url } : prev))
                 }
