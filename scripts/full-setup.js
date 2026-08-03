@@ -60,7 +60,7 @@ async function fullSetup() {
       await supabase
         .from('restaurants')
         .delete()
-        .neq('id', '00000000-0000-0000-0000-000000000000');
+        .gte('id', 0);
       console.log('✅ 기존 데이터 삭제 완료');
     } catch (error) {
       console.log('⚠️  데이터 삭제 스킵');

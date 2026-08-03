@@ -17,7 +17,7 @@ async function setupPyeongnaeng() {
 
     // 기존 데이터 삭제 (선택사항)
     console.log('📋 기존 데이터 제거 중...');
-    await supabase.from('restaurants').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+    await supabase.from('restaurants').delete().gte('id', 0);
 
     // 초기 데이터 5개 추가 (테스트용 user_id)
     const testUserId = '550e8400-e29b-41d4-a716-446655440000';
