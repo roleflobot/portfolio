@@ -64,10 +64,13 @@ export async function POST(request: NextRequest) {
       map_url,
       naver_place_name,
       naver_category,
+      naver_address,
       naver_road_address,
       naver_mapx,
       naver_mapy,
+      naver_map_url,
       naver_link_source,
+      naver_matched_at,
     } = body
 
     // 필수 필드 검증
@@ -136,10 +139,13 @@ export async function POST(request: NextRequest) {
           map_url: resolvedMapUrl,
           naver_place_name: naver_place_name?.trim() || null,
           naver_category: naver_category?.trim() || null,
+          naver_address: naver_address?.trim() || null,
           naver_road_address: naver_road_address?.trim() || null,
           naver_mapx: typeof naver_mapx === 'number' ? naver_mapx : null,
           naver_mapy: typeof naver_mapy === 'number' ? naver_mapy : null,
+          naver_map_url: naver_map_url?.trim() || null,
           naver_link_source: naver_link_source || null,
+          naver_matched_at: naver_link_source === 'auto' ? naver_matched_at || new Date().toISOString() : null,
           user_id: user.id,
         },
       ])

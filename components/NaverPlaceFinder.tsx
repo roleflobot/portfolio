@@ -7,10 +7,13 @@ export interface NaverPlaceFields {
   map_url: string
   naver_place_name: string
   naver_category: string
+  naver_address: string
   naver_road_address: string
   naver_mapx: number | null
   naver_mapy: number | null
+  naver_map_url: string
   naver_link_source: '' | 'auto' | 'manual'
+  naver_matched_at: string | null
 }
 
 interface Candidate {
@@ -21,7 +24,7 @@ interface Candidate {
   lat: number
   lng: number
   mapUrl: string
-  score: number
+  nmapUrl: string
 }
 
 interface NaverPlaceFinderProps {
@@ -71,7 +74,7 @@ export default function NaverPlaceFinder({
 
       const data = await response.json()
       if (!data.candidates || data.candidates.length === 0) {
-        setError('일치하는 장소를 찾지 못했습니다. 직접 링크를 입력해주세요.')
+        setError('서울 지역에서 일치하는 장소를 찾지 못했습니다. 직접 링크를 입력해주세요.')
         setCandidates([])
         setMode('manual')
         return
@@ -92,10 +95,13 @@ export default function NaverPlaceFinder({
       map_url: candidate.mapUrl,
       naver_place_name: candidate.name,
       naver_category: candidate.category,
+      naver_address: candidate.address,
       naver_road_address: candidate.roadAddress,
       naver_mapx: candidate.lng,
       naver_mapy: candidate.lat,
+      naver_map_url: candidate.nmapUrl,
       naver_link_source: 'auto',
+      naver_matched_at: new Date().toISOString(),
     })
     setMode('idle')
   }
@@ -117,10 +123,13 @@ export default function NaverPlaceFinder({
       map_url: manualDraft.trim(),
       naver_place_name: '',
       naver_category: '',
+      naver_address: '',
       naver_road_address: '',
       naver_mapx: null,
       naver_mapy: null,
+      naver_map_url: '',
       naver_link_source: 'manual',
+      naver_matched_at: null,
     })
     setError(null)
     setManualDraft('')

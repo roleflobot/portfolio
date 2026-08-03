@@ -18,10 +18,13 @@ interface RestaurantFormProps {
     map_url: string
     naver_place_name?: string
     naver_category?: string
+    naver_address?: string
     naver_road_address?: string
     naver_mapx?: number | null
     naver_mapy?: number | null
+    naver_map_url?: string
     naver_link_source?: string
+    naver_matched_at?: string | null
   }
   isEditing?: boolean
 }
@@ -43,10 +46,13 @@ export default function RestaurantForm({
     map_url: initialData?.map_url || '',
     naver_place_name: initialData?.naver_place_name || '',
     naver_category: initialData?.naver_category || '',
+    naver_address: initialData?.naver_address || '',
     naver_road_address: initialData?.naver_road_address || '',
     naver_mapx: initialData?.naver_mapx ?? null,
     naver_mapy: initialData?.naver_mapy ?? null,
+    naver_map_url: initialData?.naver_map_url || '',
     naver_link_source: (initialData?.naver_link_source || '') as NaverPlaceFields['naver_link_source'],
+    naver_matched_at: initialData?.naver_matched_at ?? null,
   })
 
   const handleChange = (
@@ -227,10 +233,13 @@ export default function RestaurantForm({
             map_url: formData.map_url,
             naver_place_name: formData.naver_place_name,
             naver_category: formData.naver_category,
+            naver_address: formData.naver_address,
             naver_road_address: formData.naver_road_address,
             naver_mapx: formData.naver_mapx,
             naver_mapy: formData.naver_mapy,
+            naver_map_url: formData.naver_map_url,
             naver_link_source: formData.naver_link_source,
+            naver_matched_at: formData.naver_matched_at,
           }}
           onChange={(fields) => setFormData((prev) => ({ ...prev, ...fields }))}
         />

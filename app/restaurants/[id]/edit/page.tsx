@@ -16,10 +16,13 @@ interface Restaurant {
   map_url: string | null
   naver_place_name: string | null
   naver_category: string | null
+  naver_address: string | null
   naver_road_address: string | null
   naver_mapx: number | null
   naver_mapy: number | null
+  naver_map_url: string | null
   naver_link_source: string | null
+  naver_matched_at: string | null
 }
 
 export default function EditRestaurantPage() {
@@ -99,10 +102,13 @@ export default function EditRestaurantPage() {
               map_url: restaurant.map_url || '',
               naver_place_name: restaurant.naver_place_name || '',
               naver_category: restaurant.naver_category || '',
+              naver_address: restaurant.naver_address || '',
               naver_road_address: restaurant.naver_road_address || '',
               naver_mapx: restaurant.naver_mapx,
               naver_mapy: restaurant.naver_mapy,
+              naver_map_url: restaurant.naver_map_url || '',
               naver_link_source: restaurant.naver_link_source || '',
+              naver_matched_at: restaurant.naver_matched_at,
             }}
           />
         </div>
