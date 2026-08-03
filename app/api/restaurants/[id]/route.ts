@@ -104,6 +104,9 @@ export async function PUT(
 
     if (error) {
       console.error('Supabase error:', error.message)
+      if (error.code === 'PGRST116') {
+        return NextResponse.json({ error: '식당을 찾을 수 없습니다.' }, { status: 404 })
+      }
       return NextResponse.json(
         { error: '식당 수정에 실패했습니다.' },
         { status: 500 }
@@ -184,6 +187,10 @@ export async function PATCH(
       .select()
       .single()
 
+    if (error?.code === 'PGRST116') {
+      return NextResponse.json({ error: '식당을 찾을 수 없습니다.' }, { status: 404 })
+    }
+
     if (error || !data) {
       console.error('Supabase error:', error?.message)
       return NextResponse.json(
@@ -212,7 +219,7 @@ export async function DELETE(
     return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 })
   }
 
-  const { error } = await supabase.from('restaurants').delete().eq('id', id)
+  const { data, error } = await supabase.from('restaurants').delete().eq('id', id).select()
 
   if (error) {
     console.error('Supabase error:', error.message)
@@ -220,6 +227,10 @@ export async function DELETE(
       { error: '식당 삭제에 실패했습니다.' },
       { status: 500 }
     )
+  }
+
+  if (!data || data.length === 0) {
+    return NextResponse.json({ error: '식당을 찾을 수 없습니다.' }, { status: 404 })
   }
 
   return NextResponse.json({ success: true })
