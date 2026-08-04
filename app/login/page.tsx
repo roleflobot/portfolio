@@ -116,6 +116,10 @@ export default function LoginPage() {
             {mode === 'login' ? '계정이 없나요? 회원가입' : '이미 계정이 있나요? 로그인'}
           </button>
         </div>
+
+        <p className="text-center text-xs text-wood-muted mt-6">
+          테스트 계정 &nbsp;demo@pynm.com&nbsp;/&nbsp;demo1234
+        </p>
       </div>
     </div>
   )
