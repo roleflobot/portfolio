@@ -33,7 +33,7 @@ export async function POST(
 
   if (!restaurant.visited) {
     return NextResponse.json(
-      { error: '방문 완료한 식당만 AI 한줄평을 만들 수 있습니다.' },
+      { error: '방문 완료한 식당만 AI 리뷰요약을 만들 수 있습니다.' },
       { status: 400 }
     )
   }
@@ -42,9 +42,11 @@ export async function POST(
     ? `주소: ${restaurant.address}`
     : `주소: 상세주소 미등록 (자치구: ${restaurant.district ?? '정보 없음'})`
 
-  const prompt = `너는 "평양냉면 혼밥 도장깨기"라는 개인 냉면 탐방 일지의 목소리다. 구글 검색으로 아래 식당의 실제 방문자 후기를 찾아, 그 내용을 바탕으로 이 식당에 대한 짧은 한 줄 평을 써라.
+  const prompt = `너는 "평양냉면 혼밥 도장깨기"라는 개인 냉면 탐방 일지의 목소리다. 구글 검색으로 아래 식당에 대한 실제 방문자 리뷰를 여러 개 찾아, 그 리뷰들을 종합한 리뷰 요약을 한국어로 약 3문장 써라.
 
-⚠️ 가장 중요한 규칙: 같은 상호명을 쓰는 다른 지점(다른 주소)이 있을 수 있다. 검색 결과가 아래 "식당명"과 "주소"에 동시에 일치하는 지점의 후기인지 반드시 확인하고, 상호만 같고 주소가 다른 지점의 후기는 절대 섞지 마라. 주소가 일치하는 후기를 확실히 찾지 못했다면 검색 결과를 억지로 쓰지 말고, 아래 참고 정보(가격·혼밥가능여부·메모)만으로 담백하게 한 줄 평을 써라.
+⚠️ 특정 리뷰 한두 개에 치우치지 마라. 유난히 극단적으로 좋거나 나쁜 리뷰보다, 여러 리뷰에서 반복적으로 나오는 평균적인 평가·경향을 반영해라.
+
+⚠️ 가장 중요한 규칙: 같은 상호명을 쓰는 다른 지점(다른 주소)이 있을 수 있다. 검색 결과가 아래 "식당명"과 "주소"에 동시에 일치하는 지점의 리뷰인지 반드시 확인하고, 상호만 같고 주소가 다른 지점의 리뷰는 절대 섞지 마라. 주소가 일치하는 리뷰를 충분히 찾지 못했다면 검색 결과를 억지로 쓰지 말고, 아래 참고 정보(가격·혼밥가능여부·메모)만으로 담백하게 짧게 요약해라.
 
 식당명: ${restaurant.name}
 ${addressLine}
@@ -55,10 +57,9 @@ ${addressLine}
 메모: ${restaurant.memo || '없음'}
 
 출력 형식 규칙(반드시 지켜라):
-- 한국어 문장 하나만, 줄바꿈 없이 출력한다. 글자 수를 세거나 후보를 나열하지 말고 곧바로 완성된 문장 하나만 낸다.
-- 문장은 짧게 — 대략 15~25자 정도(엄격한 기준 아님, 대략적인 감으로 충분).
-- 조용하고 담백한 문체, 감탄사·이모지·과장된 표현 금지. 서재의 장서에 남기는 짧은 열람 후기 같은 느낌.
-- 문장 앞뒤에 따옴표, 출처, 설명, "후보:" 같은 부연은 절대 붙이지 않는다.`
+- 한국어로 약 3문장, 줄바꿈 없이 하나의 문단으로 이어서 쓴다. 문장 수를 세거나 후보를 나열하지 말고 곧바로 완성된 문단 하나만 낸다.
+- 조용하고 담백한 문체, 감탄사·이모지·과장된 표현 금지. 서재의 장서에 남기는 차분한 열람 후기 같은 느낌.
+- 앞뒤에 따옴표, 출처, 설명, "후보:" 같은 부연은 절대 붙이지 않는다.`
 
   try {
     const geminiResponse = await fetch(
@@ -81,7 +82,7 @@ ${addressLine}
       const errBody = await geminiResponse.text()
       console.error('Gemini API error:', geminiResponse.status, errBody)
       return NextResponse.json(
-        { error: 'AI 한줄평 생성에 실패했습니다.' },
+        { error: 'AI 리뷰요약 생성에 실패했습니다.' },
         { status: 502 }
       )
     }
@@ -92,13 +93,13 @@ ${addressLine}
       .join('')
       .trim()
     // 검색+추론 과정에서 후보 나열이나 글자수 계산 같은 잡음이 새어나오면
-    // 한 줄 평이 아니라 여러 줄짜리 장문이 되므로, 그런 결과는 저장하지 않는다.
-    const text = rawText.split('\n')[0].trim()
+    // 리뷰 요약이 아니라 훨씬 길고 줄바꿈 섞인 장문이 되므로, 그런 결과는 저장하지 않는다.
+    const text = rawText.replace(/\s*\n+\s*/g, ' ').trim()
 
-    if (!text || rawText.includes('\n') || text.length > 80) {
+    if (!text || text.length > 300 || /후보|글자 수/.test(text)) {
       console.error('Gemini unexpected output:', rawText.slice(0, 300))
       return NextResponse.json(
-        { error: 'AI 한줄평 생성에 실패했습니다. 다시 시도해주세요.' },
+        { error: 'AI 리뷰요약 생성에 실패했습니다. 다시 시도해주세요.' },
         { status: 502 }
       )
     }
@@ -113,7 +114,7 @@ ${addressLine}
     if (error || !data) {
       console.error('Supabase update error:', error?.message)
       return NextResponse.json(
-        { error: 'AI 한줄평 저장에 실패했습니다.' },
+        { error: 'AI 리뷰요약 저장에 실패했습니다.' },
         { status: 500 }
       )
     }
@@ -122,7 +123,7 @@ ${addressLine}
   } catch (error) {
     console.error('Gemini fetch error:', error)
     return NextResponse.json(
-      { error: 'AI 한줄평 생성 중 오류가 발생했습니다.' },
+      { error: 'AI 리뷰요약 생성 중 오류가 발생했습니다.' },
       { status: 500 }
     )
   }

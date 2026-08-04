@@ -193,7 +193,7 @@ export default function RestaurantDetailPage() {
               </div>
               {restaurant.visited && (
                 <div>
-                  <dt className="text-sm text-wood-muted mb-2">AI 한줄평</dt>
+                  <dt className="text-sm text-wood-muted mb-2">AI 리뷰요약</dt>
                   <dd>
                     <AiComment
                       id={restaurant.id}
