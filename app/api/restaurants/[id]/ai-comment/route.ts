@@ -23,19 +23,12 @@ export async function POST(
 
   const { data: restaurant, error: fetchError } = await supabase
     .from('restaurants')
-    .select('name, district, address, price, solo_status, rating, memo, visited')
+    .select('name, district, address, price, solo_status, rating, memo')
     .eq('id', id)
     .single()
 
   if (fetchError || !restaurant) {
     return NextResponse.json({ error: '식당을 찾을 수 없습니다.' }, { status: 404 })
-  }
-
-  if (!restaurant.visited) {
-    return NextResponse.json(
-      { error: '방문 완료한 식당만 AI 리뷰요약을 만들 수 있습니다.' },
-      { status: 400 }
-    )
   }
 
   const addressLine = restaurant.address

@@ -203,20 +203,18 @@ export default function RestaurantDetailPage() {
             </div>
           </div>
 
-          {restaurant.visited && (
-            <div>
-              <label className="block text-sm text-wood-muted mb-2">
-                AI 리뷰요약
-              </label>
-              <AiComment
-                id={restaurant.id}
-                comment={restaurant.ai_comment}
-                onChange={(ai_comment) =>
-                  setRestaurant((prev) => (prev ? { ...prev, ai_comment } : prev))
-                }
-              />
-            </div>
-          )}
+          <div>
+            <label className="block text-sm text-wood-muted mb-2">
+              AI 리뷰요약
+            </label>
+            <AiComment
+              id={restaurant.id}
+              comment={restaurant.ai_comment}
+              onChange={(ai_comment) =>
+                setRestaurant((prev) => (prev ? { ...prev, ai_comment } : prev))
+              }
+            />
+          </div>
 
           <div>
             <label className="block text-sm text-wood-muted mb-2">
