@@ -191,20 +191,6 @@ export default function RestaurantDetailPage() {
                   />
                 </dd>
               </div>
-              {restaurant.visited && (
-                <div>
-                  <dt className="text-sm text-wood-muted mb-2">AI 리뷰요약</dt>
-                  <dd>
-                    <AiComment
-                      id={restaurant.id}
-                      comment={restaurant.ai_comment}
-                      onChange={(ai_comment) =>
-                        setRestaurant((prev) => (prev ? { ...prev, ai_comment } : prev))
-                      }
-                    />
-                  </dd>
-                </div>
-              )}
             </dl>
             <div className="w-64 flex-shrink-0">
               <RestaurantPhoto
@@ -216,6 +202,21 @@ export default function RestaurantDetailPage() {
               />
             </div>
           </div>
+
+          {restaurant.visited && (
+            <div>
+              <label className="block text-sm text-wood-muted mb-2">
+                AI 리뷰요약
+              </label>
+              <AiComment
+                id={restaurant.id}
+                comment={restaurant.ai_comment}
+                onChange={(ai_comment) =>
+                  setRestaurant((prev) => (prev ? { ...prev, ai_comment } : prev))
+                }
+              />
+            </div>
+          )}
 
           <div>
             <label className="block text-sm text-wood-muted mb-2">
