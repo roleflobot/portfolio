@@ -163,6 +163,48 @@ export default function RestaurantDetailPage() {
                 <dt className="text-sm text-wood-muted">혼밥 가능 여부</dt>
                 <dd className="text-wood-ink">{restaurant.solo_status}</dd>
               </div>
+              <div>
+                <dt className="text-sm text-wood-muted mb-2">방문 여부</dt>
+                <dd>
+                  <VisitedToggle
+                    id={restaurant.id}
+                    visited={restaurant.visited}
+                    onChange={(visited) =>
+                      setRestaurant((prev) =>
+                        prev ? { ...prev, visited, rating: visited ? prev.rating : null } : prev
+                      )
+                    }
+                  />
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm text-wood-muted mb-2">개인 별점</dt>
+                <dd>
+                  <RatingInput
+                    id={restaurant.id}
+                    rating={restaurant.rating}
+                    onChange={(rating) =>
+                      setRestaurant((prev) =>
+                        prev ? { ...prev, rating, visited: rating ? true : prev.visited } : prev
+                      )
+                    }
+                  />
+                </dd>
+              </div>
+              {restaurant.visited && (
+                <div>
+                  <dt className="text-sm text-wood-muted mb-2">AI 한줄평</dt>
+                  <dd>
+                    <AiComment
+                      id={restaurant.id}
+                      comment={restaurant.ai_comment}
+                      onChange={(ai_comment) =>
+                        setRestaurant((prev) => (prev ? { ...prev, ai_comment } : prev))
+                      }
+                    />
+                  </dd>
+                </div>
+              )}
             </dl>
             <div className="w-64 flex-shrink-0">
               <RestaurantPhoto
@@ -174,52 +216,6 @@ export default function RestaurantDetailPage() {
               />
             </div>
           </div>
-
-          <dl className="space-y-4">
-            <div>
-              <dt className="text-sm text-wood-muted mb-2">방문 여부</dt>
-              <dd>
-                <VisitedToggle
-                  id={restaurant.id}
-                  visited={restaurant.visited}
-                  onChange={(visited) =>
-                    setRestaurant((prev) =>
-                      prev ? { ...prev, visited, rating: visited ? prev.rating : null } : prev
-                    )
-                  }
-                />
-              </dd>
-            </div>
-            <div>
-              <dt className="text-sm text-wood-muted mb-2">개인 별점</dt>
-              <dd>
-                <RatingInput
-                  id={restaurant.id}
-                  rating={restaurant.rating}
-                  onChange={(rating) =>
-                    setRestaurant((prev) =>
-                      prev ? { ...prev, rating, visited: rating ? true : prev.visited } : prev
-                    )
-                  }
-                />
-              </dd>
-            </div>
-          </dl>
-
-          {restaurant.visited && (
-            <div>
-              <label className="block text-sm text-wood-muted mb-2">
-                AI 한줄평
-              </label>
-              <AiComment
-                id={restaurant.id}
-                comment={restaurant.ai_comment}
-                onChange={(ai_comment) =>
-                  setRestaurant((prev) => (prev ? { ...prev, ai_comment } : prev))
-                }
-              />
-            </div>
-          )}
 
           <div>
             <label className="block text-sm text-wood-muted mb-2">

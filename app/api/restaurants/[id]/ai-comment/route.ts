@@ -1,7 +1,7 @@
 import { getRequestUser } from '@/lib/supabase-server'
 import { NextResponse, NextRequest } from 'next/server'
 
-const GEMINI_MODEL = 'gemini-2.5-flash'
+const GEMINI_MODEL = 'gemini-3.6-flash'
 
 export async function POST(
   request: NextRequest,
@@ -58,9 +58,8 @@ export async function POST(
         body: JSON.stringify({
           contents: [{ parts: [{ text: prompt }] }],
           generationConfig: {
-            maxOutputTokens: 300,
+            maxOutputTokens: 1024,
             temperature: 0.8,
-            thinkingConfig: { thinkingBudget: 0 },
           },
         }),
       }
