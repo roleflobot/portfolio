@@ -13,6 +13,18 @@ export default function LoginPage() {
   const [message, setMessage] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
+  const heroGrid = [
+    'neungrado.jpg',
+    'bongpiyangyoungsan.jpg',
+    'seogwanshin.jpg',
+    'daeyeop.jpg',
+    'seoryeong.jpg',
+    'woorae.jpg',
+    'gyeonggiok.jpg',
+    'yujin.jpg',
+    'seogwangyo.jpg',
+  ]
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
       if (data.session) {
@@ -48,10 +60,15 @@ export default function LoginPage() {
 
   return (
     <div className="relative flex flex-col min-h-screen items-center justify-center px-6 overflow-hidden">
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('/hero/woorae.jpg')" }}
-      />
+      <div className="absolute inset-0 grid grid-cols-3 grid-rows-3">
+        {heroGrid.map((file) => (
+          <div
+            key={file}
+            className="bg-cover bg-center"
+            style={{ backgroundImage: `url('/hero/${file}')` }}
+          />
+        ))}
+      </div>
       <div className="absolute inset-0 bg-wood-bg/90" />
       <div className="relative z-10 w-full max-w-sm">
         <div className="text-center mb-2">
