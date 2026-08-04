@@ -6,6 +6,7 @@ import Link from 'next/link'
 import VisitedToggle from '@/components/VisitedToggle'
 import RatingInput from '@/components/RatingInput'
 import RestaurantPhoto from '@/components/RestaurantPhoto'
+import AiComment from '@/components/AiComment'
 import { authFetch } from '@/lib/authFetch'
 import { useAuthGuard } from '@/lib/useAuthGuard'
 
@@ -22,6 +23,7 @@ interface Restaurant {
   map_url: string | null
   naver_map_url: string | null
   photo_url: string | null
+  ai_comment: string | null
 }
 
 export default function RestaurantDetailPage() {
@@ -203,6 +205,21 @@ export default function RestaurantDetailPage() {
               </dd>
             </div>
           </dl>
+
+          {restaurant.visited && (
+            <div>
+              <label className="block text-sm text-wood-muted mb-2">
+                AI 한줄평
+              </label>
+              <AiComment
+                id={restaurant.id}
+                comment={restaurant.ai_comment}
+                onChange={(ai_comment) =>
+                  setRestaurant((prev) => (prev ? { ...prev, ai_comment } : prev))
+                }
+              />
+            </div>
+          )}
 
           <div>
             <label className="block text-sm text-wood-muted mb-2">
