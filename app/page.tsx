@@ -100,7 +100,7 @@ export default function Home() {
             <h1 className="ink-wash-title mb-2">
               <span>평양냉면 혼자 먹기</span>
             </h1>
-            <p className="text-lg text-wood-muted">
+            <p className="text-lg text-wood-muted whitespace-nowrap">
               서울의 1인 식사 가능한 평양냉면집을 저장하고 혼밥 도장을 깨보세요
             </p>
           </div>
