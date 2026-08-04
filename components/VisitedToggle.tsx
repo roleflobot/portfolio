@@ -35,16 +35,21 @@ export default function VisitedToggle({ id, visited, onChange }: VisitedTogglePr
   }
 
   return (
-    <button
-      onClick={handleToggle}
-      disabled={loading}
-      className={`px-6 py-3 font-medium rounded-sm transition-colors ${
-        visited
-          ? 'bg-wood-sage hover:bg-wood-sage-hover text-wood-accent-ink'
-          : 'border border-wood-border-strong text-wood-ink hover:bg-wood-bg'
-      }`}
-    >
-      {loading ? '처리 중...' : visited ? '✅ 다녀왔어요' : '아직 안 가봤어요'}
-    </button>
+    <div className="relative inline-block">
+      <button
+        onClick={handleToggle}
+        disabled={loading}
+        className={`px-6 py-3 font-medium rounded-sm transition-colors ${
+          visited
+            ? 'bg-wood-sage hover:bg-wood-sage-hover text-wood-accent-ink'
+            : 'border border-wood-border-strong text-wood-ink hover:bg-wood-bg'
+        }`}
+      >
+        {loading ? '처리 중...' : visited ? '✅ 다녀왔어요' : '아직 안 가봤어요'}
+      </button>
+      <div className={`stamp-mark ${visited ? 'stamp-mark--on' : ''}`} aria-hidden="true">
+        정복
+      </div>
+    </div>
   )
 }

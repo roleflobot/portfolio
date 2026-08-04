@@ -27,6 +27,7 @@
   --wood-success-bg: #e3ebdd;
   --wood-success-ink: #3f5236;
   --wood-success-border: #b9cba9;
+  --wood-seal: #b23c26;
 }
 
 @theme inline {
@@ -57,6 +58,7 @@
   --color-wood-success-bg: var(--wood-success-bg);
   --color-wood-success-ink: var(--wood-success-ink);
   --color-wood-success-border: var(--wood-success-border);
+  --color-wood-seal: var(--wood-seal);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -87,6 +89,7 @@
     --wood-success-bg: #2a331f;
     --wood-success-ink: #c4d6b0;
     --wood-success-border: #445236;
+    --wood-seal: #d1573c;
   }
 }
 
@@ -94,4 +97,38 @@ body {
   background: var(--wood-bg);
   color: var(--wood-ink);
   font-family: "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", Arial, sans-serif;
+}
+
+.stamp-mark {
+  position: absolute;
+  top: -22px;
+  right: -14px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 3px solid var(--wood-seal);
+  color: var(--wood-seal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "AppleMyungjo", "Batang", "궁서", serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  background: color-mix(in srgb, var(--wood-seal) 6%, transparent);
+  transform: rotate(-11deg) scale(0);
+  opacity: 0;
+  transition: transform 0.28s cubic-bezier(0.2, 1.6, 0.4, 1), opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.stamp-mark--on {
+  transform: rotate(-11deg) scale(1);
+  opacity: 0.92;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stamp-mark {
+    transition: opacity 0.01s linear;
+  }
 }
