@@ -83,10 +83,22 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-wood-bg">
       <main className="flex-1 max-w-4xl mx-auto w-full px-6 py-12">
+        <div className="flex gap-2 mb-6">
+          {['neungrado', 'bukchang', 'daeyeop', 'hyejun', 'seoryeong'].map((name) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              key={name}
+              src={`/hero/${name}.jpg`}
+              alt=""
+              className="flex-1 h-16 md:h-20 object-cover rounded-sm border border-wood-border-strong saturate-[0.82] sepia-[0.12]"
+            />
+          ))}
+        </div>
+
         <div className="flex items-start justify-between mb-8">
           <div>
-            <h1 className="text-4xl font-bold text-wood-ink mb-2">
-              🍜 평양냉면 혼자 먹기
+            <h1 className="ink-wash-title mb-2">
+              <span>평양냉면 혼자 먹기</span>
             </h1>
             <p className="text-lg text-wood-muted">
               서울의 1인 식사 가능한 평양냉면집을 저장하고 혼밥 도장을 깨보세요

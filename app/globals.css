@@ -132,3 +132,27 @@ body {
     transition: opacity 0.01s linear;
   }
 }
+
+.ink-wash-title {
+  display: inline-block;
+  padding: 16px 4px;
+  margin: 0 0 0 -4px;
+  background: radial-gradient(
+    ellipse at 50% 45%,
+    color-mix(in srgb, var(--wood-wood) 16%, transparent) 0%,
+    transparent 68%
+  );
+}
+
+.ink-wash-title span {
+  display: block;
+  font-family: "HeadlineA", "궁서", "Gungsuh", serif;
+  font-size: 32px;
+  letter-spacing: 0.1em;
+  color: var(--wood-ink);
+  text-wrap: balance;
+}
+
+.ink-wash-title--sm span {
+  font-size: 23px;
+}

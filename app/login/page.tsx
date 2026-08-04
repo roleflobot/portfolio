@@ -47,11 +47,18 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-wood-bg items-center justify-center px-6">
-      <div className="w-full max-w-sm">
-        <h1 className="text-3xl font-bold text-wood-ink mb-2 text-center">
-          🍜 평양냉면 혼밥 도장깨기
-        </h1>
+    <div className="relative flex flex-col min-h-screen items-center justify-center px-6 overflow-hidden">
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: "url('/hero/woorae.jpg')" }}
+      />
+      <div className="absolute inset-0 bg-wood-bg/90" />
+      <div className="relative z-10 w-full max-w-sm">
+        <div className="text-center mb-2">
+          <h1 className="ink-wash-title ink-wash-title--sm">
+            <span>평양냉면 혼자 먹기</span>
+          </h1>
+        </div>
         <p className="text-wood-muted text-center mb-8">
           {mode === 'login' ? '로그인하고 나만의 목록을 관리하세요' : '회원가입하고 시작하세요'}
         </p>
