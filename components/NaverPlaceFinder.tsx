@@ -146,7 +146,7 @@ export default function NaverPlaceFinder({
   return (
     <div>
       {value.map_url && mode === 'idle' && (
-        <div className="mb-3 px-3 py-2 border border-wood-border-strong rounded-sm bg-wood-bg text-sm text-wood-ink">
+        <div className="mb-3 px-3 py-2 border border-wood-border-strong rounded-sm bg-wood-bg text-sm text-wood-ink break-all">
           ✅ 네이버 지도 연결됨: {confirmedLabel}
         </div>
       )}
