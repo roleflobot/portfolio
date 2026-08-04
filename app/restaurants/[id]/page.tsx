@@ -71,13 +71,13 @@ export default function RestaurantDetailPage() {
       })
 
       if (!response.ok) {
-        throw new Error('메모 저장에 실패했습니다.')
+        throw new Error('후기 저장에 실패했습니다.')
       }
 
       const data = await response.json()
       setRestaurant((prev) => (prev ? { ...prev, memo: data.memo } : prev))
     } catch (err) {
-      alert(err instanceof Error ? err.message : '메모 저장에 실패했습니다.')
+      alert(err instanceof Error ? err.message : '후기 저장에 실패했습니다.')
     } finally {
       setSavingMemo(false)
     }
@@ -220,13 +220,13 @@ export default function RestaurantDetailPage() {
 
           <div>
             <label className="block text-sm text-wood-muted mb-2">
-              메모
+              실제 방문 후기
             </label>
             <textarea
               value={memoDraft}
               onChange={(e) => setMemoDraft(e.target.value)}
               rows={3}
-              placeholder="혼밥 경험이나 한 줄 메모를 남겨보세요"
+              placeholder="직접 가본 뒤의 후기를 남겨보세요"
               className="w-full px-4 py-2 border border-wood-border-strong rounded-sm bg-wood-surface text-wood-ink placeholder-wood-muted focus:outline-none focus:ring-2 focus:ring-wood-accent mb-2"
             />
             <button
@@ -234,7 +234,7 @@ export default function RestaurantDetailPage() {
               disabled={savingMemo || memoDraft === (restaurant.memo || '')}
               className="px-4 py-2 bg-wood-accent hover:bg-wood-accent-hover disabled:bg-wood-accent/40 disabled:cursor-not-allowed text-wood-accent-ink text-sm font-medium rounded-sm transition-colors"
             >
-              {savingMemo ? '저장 중...' : '메모 저장'}
+              {savingMemo ? '저장 중...' : '후기 저장'}
             </button>
           </div>
 
