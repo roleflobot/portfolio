@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { SEOUL_DISTRICTS } from '@/lib/districts'
 import { authFetch } from '@/lib/authFetch'
 import { AI_RECOMMEND_DRAFT_KEY } from '@/lib/aiRecommendDraft'
+import AiSparkleIcon from '@/components/icons/AiSparkleIcon'
 
 export default function AiRecommendButton() {
   const router = useRouter()
@@ -68,8 +69,9 @@ export default function AiRecommendButton() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="px-6 py-3 border border-wood-border-strong text-wood-ink font-medium rounded-sm hover:bg-wood-surface transition-colors whitespace-nowrap"
+        className="flex items-center gap-2 px-6 py-3 border border-wood-border-strong text-wood-ink font-medium rounded-sm hover:bg-wood-surface transition-colors whitespace-nowrap"
       >
+        <AiSparkleIcon />
         AI 추천
       </button>
 

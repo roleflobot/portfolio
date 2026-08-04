@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { authFetch } from '@/lib/authFetch'
+import AiSparkleIcon from '@/components/icons/AiSparkleIcon'
 
 interface AiCommentProps {
   id: number
@@ -41,8 +42,9 @@ export default function AiComment({ id, comment, onChange }: AiCommentProps) {
       <button
         onClick={handleGenerate}
         disabled={loading}
-        className="px-4 py-2 border border-wood-border-strong text-wood-ink text-sm font-medium rounded-sm hover:bg-wood-bg disabled:opacity-50 transition-colors"
+        className="flex items-center gap-2 px-4 py-2 border border-wood-border-strong text-wood-ink text-sm font-medium rounded-sm hover:bg-wood-bg disabled:opacity-50 transition-colors"
       >
+        <AiSparkleIcon />
         {loading ? '작성 중...' : comment ? 'AI 리뷰요약 다시 만들기' : 'AI 리뷰요약 만들기'}
       </button>
     </div>

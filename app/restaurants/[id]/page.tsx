@@ -7,6 +7,7 @@ import VisitedToggle from '@/components/VisitedToggle'
 import RatingInput from '@/components/RatingInput'
 import RestaurantPhoto from '@/components/RestaurantPhoto'
 import AiComment from '@/components/AiComment'
+import NaverIcon from '@/components/icons/NaverIcon'
 import { authFetch } from '@/lib/authFetch'
 import { useAuthGuard } from '@/lib/useAuthGuard'
 
@@ -241,8 +242,9 @@ export default function RestaurantDetailPage() {
               href={restaurant.map_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="block text-center px-6 py-3 bg-wood-sage hover:bg-wood-sage-hover text-wood-accent-ink font-medium rounded-sm transition-colors"
+              className="flex items-center justify-center gap-2 px-6 py-3 bg-wood-sage hover:bg-wood-sage-hover text-wood-accent-ink font-medium rounded-sm transition-colors"
             >
+              <NaverIcon />
               네이버 지도에서 보기
             </a>
           )}
