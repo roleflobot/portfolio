@@ -84,7 +84,7 @@ export default function Home() {
     <div className="flex flex-col min-h-screen bg-wood-bg">
       <main className="flex-1 max-w-4xl mx-auto w-full px-6 py-12">
         <div className="flex gap-2 mb-6">
-          {['neungrado', 'bukchang', 'daeyeop', 'hyejun', 'seoryeong'].map((name) => (
+          {['neungrado', 'bongpiyangyoungsan', 'daeyeop', 'seogwanshin', 'seoryeong'].map((name) => (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               key={name}
