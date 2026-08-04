@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "평양냉면 혼밥 도장깨기",
+  title: "평양냉면 혼자 먹기",
   description: "서울의 평양냉면집을 저장하고 혼밥 가능 여부를 기록하는 개인 웹 서비스",
 };
 
