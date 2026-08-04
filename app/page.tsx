@@ -7,6 +7,7 @@ import { SEOUL_DISTRICTS } from '@/lib/districts'
 import { authFetch } from '@/lib/authFetch'
 import { useAuthGuard } from '@/lib/useAuthGuard'
 import { supabase } from '@/lib/supabase'
+import AiRecommendButton from '@/components/AiRecommendButton'
 
 interface Restaurant {
   id: number
@@ -85,7 +86,7 @@ export default function Home() {
         <div className="flex items-start justify-between mb-8">
           <div>
             <h1 className="text-4xl font-bold text-wood-ink mb-2">
-              🍜 평양냉면 혼밥 도장깨기
+              🍜 평양냉면 혼자 먹기
             </h1>
             <p className="text-lg text-wood-muted">
               서울의 1인 식사 가능한 평양냉면집을 저장하고 혼밥 도장을 깨보세요
@@ -98,6 +99,7 @@ export default function Home() {
             >
               + 식당 등록
             </Link>
+            <AiRecommendButton />
             <button
               onClick={handleLogout}
               className="px-6 py-3 border border-wood-border-strong text-wood-ink font-medium rounded-sm hover:bg-wood-surface transition-colors whitespace-nowrap"

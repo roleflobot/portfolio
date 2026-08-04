@@ -25,6 +25,7 @@ interface RestaurantFormProps {
     naver_map_url?: string
     naver_link_source?: string
     naver_matched_at?: string | null
+    photo_url?: string | null
   }
   isEditing?: boolean
 }
@@ -53,6 +54,7 @@ export default function RestaurantForm({
     naver_map_url: initialData?.naver_map_url || '',
     naver_link_source: (initialData?.naver_link_source || '') as NaverPlaceFields['naver_link_source'],
     naver_matched_at: initialData?.naver_matched_at ?? null,
+    photo_url: initialData?.photo_url ?? null,
   })
 
   const handleChange = (
@@ -135,6 +137,25 @@ export default function RestaurantForm({
       {error && (
         <div className="p-4 bg-wood-error-bg rounded-sm border border-wood-error-border">
           <p className="text-wood-error-ink text-sm">{error}</p>
+        </div>
+      )}
+
+      {formData.photo_url && (
+        <div>
+          <label className={labelClass}>AI가 찾은 사진</label>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={formData.photo_url}
+            alt="AI가 찾은 식당 사진"
+            className="w-full h-64 object-cover rounded-sm border border-wood-border-strong mb-2"
+          />
+          <button
+            type="button"
+            onClick={() => setFormData((prev) => ({ ...prev, photo_url: null }))}
+            className="px-4 py-2 border border-wood-border-strong text-wood-ink text-sm font-medium rounded-sm hover:bg-wood-bg transition-colors"
+          >
+            사진 제거
+          </button>
         </div>
       )}
 

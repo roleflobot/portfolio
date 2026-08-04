@@ -71,6 +71,7 @@ export async function POST(request: NextRequest) {
       naver_map_url,
       naver_link_source,
       naver_matched_at,
+      photo_url,
     } = body
 
     // 필수 필드 검증
@@ -117,6 +118,17 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    if (photo_url && typeof photo_url === 'string' && photo_url.trim()) {
+      try {
+        new URL(photo_url.trim())
+      } catch {
+        return NextResponse.json(
+          { error: '사진 URL 형식이 올바르지 않습니다.' },
+          { status: 400 }
+        )
+      }
+    }
+
     // 지도 링크: 직접 입력한 링크 > 주소 기반 검색 > 식당명+냉면 검색 순으로 사용한다
     const trimmedAddress = address?.trim()
     const resolvedMapUrl =
@@ -146,6 +158,7 @@ export async function POST(request: NextRequest) {
           naver_map_url: naver_map_url?.trim() || null,
           naver_link_source: naver_link_source || null,
           naver_matched_at: naver_link_source === 'auto' ? naver_matched_at || new Date().toISOString() : null,
+          photo_url: photo_url?.trim() || null,
           user_id: user.id,
         },
       ])
