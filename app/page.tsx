@@ -208,10 +208,15 @@ export default function Home() {
                   {restaurant.name}
                 </h2>
                 {restaurant.rating && (
-                  <div className="mb-3">
-                    <span className="inline-block bg-wood-badge-bg px-3 py-1 rounded-sm text-sm font-medium text-wood-badge-ink">
-                      ⭐ {restaurant.rating}
-                    </span>
+                  <div className="mb-3 flex gap-0.5 text-lg leading-none" aria-label={`별점 ${restaurant.rating}점`}>
+                    {[1, 2, 3, 4, 5].map((value) => (
+                      <span
+                        key={value}
+                        className={value <= restaurant.rating! ? 'text-wood-accent' : 'text-wood-border-strong'}
+                      >
+                        {value <= restaurant.rating! ? '★' : '☆'}
+                      </span>
+                    ))}
                   </div>
                 )}
                 <p className="text-sm text-wood-muted mb-1">
