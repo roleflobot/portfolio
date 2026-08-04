@@ -1,9 +1,26 @@
 const { Client } = require('pg');
+require('./load-env')();
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const databasePassword = process.env.SUPABASE_DB_PASSWORD;
+
+let projectRef;
+try {
+  projectRef = new URL(supabaseUrl).hostname.split('.')[0];
+} catch {
+  // 아래의 공통 환경변수 오류로 처리한다.
+}
+
+if (!projectRef || !databasePassword) {
+  console.error('❌ NEXT_PUBLIC_SUPABASE_URL 또는 SUPABASE_DB_PASSWORD가 없습니다.');
+  console.error('   .env.local 파일을 확인하세요.');
+  process.exit(1);
+}
 
 const client = new Client({
-  host: 'db.tyfacrovbcwpnuudqeus.supabase.co',
+  host: `db.${projectRef}.supabase.co`,
   user: 'postgres',
-  password: 'lm044abkF@77',
+  password: databasePassword,
   database: 'postgres',
   port: 5432,
   ssl: { rejectUnauthorized: false }
@@ -38,7 +55,6 @@ async function migrate() {
     console.log('다음 단계: node scripts/migrate-to-pyeongnaeng.js');
 
     await client.end();
-
   } catch (error) {
     console.error('❌ 에러:', error.message);
     process.exit(1);

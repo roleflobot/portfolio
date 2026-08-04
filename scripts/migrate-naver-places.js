@@ -18,17 +18,7 @@
  */
 
 const { createClient } = require('@supabase/supabase-js');
-const fs = require('fs');
-const path = require('path');
-
-const envPath = path.join(__dirname, '..', '.env.local');
-if (fs.existsSync(envPath)) {
-  const envContent = fs.readFileSync(envPath, 'utf-8');
-  envContent.split('\n').forEach((line) => {
-    const [key, value] = line.split('=');
-    if (key && value) process.env[key.trim()] = value.trim();
-  });
-}
+require('./load-env')();
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;

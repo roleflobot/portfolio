@@ -9,8 +9,9 @@
 - [AGENTS.md](./AGENTS.md) — 이 프로젝트의 Next.js 버전 관련 주의사항 (Pages Router 문법 금지 등)
 - [PYEONGNAENG_SOLO_QUEST_PLAN.md](./PYEONGNAENG_SOLO_QUEST_PLAN.md) — 전체 기획서, DB 스키마, 완료 현황
 - [README.md](./README.md) — 기능 요약, 실행 방법
+- [SUPABASE_MCP_SETUP.md](./SUPABASE_MCP_SETUP.md) — Supabase 플러그인 실패 원인과 공식 MCP 직접 연결 기록
 
-이 세 문서를 먼저 읽고 프로젝트 구조를 파악한 뒤 아래 절차를 시작하세요.
+이 네 문서를 먼저 읽고 프로젝트 구조를 파악한 뒤 아래 절차를 시작하세요.
 
 ---
 
@@ -33,6 +34,7 @@ Codex는 아래 값을 **절대로 지어내거나 코드에 직접 쓰지 말�
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase 프로젝트 URL | Supabase 대시보드 → Project Settings → API |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | 클라이언트용 공개 키 | 위와 동일 |
 | `SUPABASE_SERVICE_ROLE_KEY` | 서버 전용 관리자 키 (절대 클라이언트 코드에 노출 금지) | 위와 동일 |
+| `SUPABASE_DB_PASSWORD` | 직접 PostgreSQL 마이그레이션용 비밀번호 (로컬 전용·선택) | Supabase 대시보드 → Project Settings → Database |
 | `NAVER_CLIENT_ID` / `NAVER_CLIENT_SECRET` | 네이버 지역검색 API | 네이버 개발자센터 |
 | `GEMINI_API_KEY` | Gemini API (AI 기능) | Google AI Studio |
 | Vercel 로그인 | 배포 권한 | `vercel login` 실행 시 브라우저 인증창으로 사람이 직접 로그인 |
@@ -41,6 +43,7 @@ Codex는 아래 값을 **절대로 지어내거나 코드에 직접 쓰지 말�
 - 이 표의 값들은 `git commit`에 절대 포함되면 안 됩니다. 커밋 전에 `git status`로 `.env.local`이 스테이징되지 않았는지 항상 확인하세요.
 - `.env.local.example`에는 값 없이 변수 이름만 추가/유지합니다.
 - 스크립트(`scripts/*.js`)에 키를 하드코딩하지 마세요. 이 저장소에는 과거에 그렇게 만들어졌다가 나중에 제거된 스크립트들이 있었습니다 — 같은 실수를 반복하지 마세요.
+- `SUPABASE_DB_PASSWORD`는 로컬에서 직접 SQL 마이그레이션을 실행할 때만 사용하며 Vercel 환경변수에는 등록하지 않습니다.
 
 ---
 
@@ -73,7 +76,7 @@ npx vercel env add <이름> development
 
 ### 3.3 Supabase 확인
 
-Supabase는 별도 CLI 로그인 없이 위 환경변수(`NEXT_PUBLIC_SUPABASE_URL` 등)만 있으면 앱에서 바로 연결됩니다. 스키마를 확인하려면 Supabase 대시보드의 Table Editor / SQL Editor를 쓰거나, 이미 있는 `SUPABASE_SERVICE_ROLE_KEY`로 로컬 스크립트를 실행하세요.
+Supabase는 별도 CLI 로그인 없이 위 환경변수(`NEXT_PUBLIC_SUPABASE_URL` 등)만 있으면 앱의 데이터·Auth·Storage API에 연결됩니다. `SUPABASE_SERVICE_ROLE_KEY`로 서버/로컬 관리자 작업을 할 수 있지만 임의 SQL, DDL, RLS 정책 변경까지 실행할 수 있는 키는 아닙니다. 스키마·RLS 변경은 Supabase 연결 도구나 대시보드 SQL Editor를 우선 사용하고, 직접 PostgreSQL 접속이 꼭 필요할 때만 로컬의 `SUPABASE_DB_PASSWORD`를 사용하세요.
 
 ### 3.4 GitHub
 

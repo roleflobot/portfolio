@@ -5,9 +5,9 @@
 ### ✅ 완성된 자동화
 
 1. **로컬 초기화 (npm run setup)**
-   - 기존 데이터 자동 삭제
-   - 평양냉면 초기 데이터 5개 추가
-   - Supabase와 완전 연동
+   - `restaurants` 전체 데이터를 삭제하는 관리자용 명령
+   - 사용자가 데이터 초기화를 명시적으로 요청한 경우에만 실행
+   - 현재 운영·데모 데이터에는 실행 금지
 
 2. **GitHub - Vercel 자동 배포**
    - main 브랜치 푸시 → 자동 배포
@@ -31,7 +31,7 @@ npm run dev
 # http://localhost:3000 에서 테스트
 
 # 2. 변경사항 커밋
-git add .
+git add <변경한 파일만 명시>
 git commit -m "기능명: 설명"
 
 # 3. GitHub에 푸시 (자동 배포)
@@ -79,13 +79,12 @@ https://vercel.com/roleflobot/quest/settings/environment-variables
 
 ```bash
 # 1. 개발 서버 시작
-npm run setup
 npm run dev
 
 # 2. 기능 테스트
 # http://localhost:3000 에서 모든 기능 확인
 
-# 3. 데이터 초기화 (필요시)
+# 3. 데이터 초기화 (사용자가 명시적으로 승인한 경우에만)
 npm run setup
 ```
 

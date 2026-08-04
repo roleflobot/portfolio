@@ -1,7 +1,13 @@
 const { createClient } = require('@supabase/supabase-js');
+require('./load-env')();
 
-const supabaseUrl = 'https://tyfacrovbcwpnuudqeus.supabase.co';
-const supabaseAnonKey = 'sb_publishable_uwAtdt5ZWeE_CQy9J6H_KA_0DrasmPJ';
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error('❌ Supabase 환경변수가 없습니다. .env.local을 확인하세요.');
+  process.exit(1);
+}
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
@@ -25,7 +31,6 @@ async function checkSchema() {
     } else {
       console.log('테이블은 있지만 데이터가 없습니다.');
     }
-
   } catch (error) {
     console.error('❌ 오류:', error.message);
   }
