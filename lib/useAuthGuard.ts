@@ -14,12 +14,16 @@ export function useAuthGuard() {
   const [session, setSession] = useState<Session | null | undefined>(undefined)
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      if (!data.session) {
+    supabase.auth.getSession()
+      .then(({ data }) => {
+        if (!data.session) {
+          router.replace('/login')
+        }
+        setSession(data.session)
+      })
+      .catch(() => {
         router.replace('/login')
-      }
-      setSession(data.session)
-    })
+      })
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, newSession) => {
       if (!newSession) {
