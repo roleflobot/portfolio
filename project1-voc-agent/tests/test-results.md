@@ -1,8 +1,8 @@
 # 테스트 결과
 
-## 수동 재구현 워크플로우(zZxpxTUVhUh2Vvon) — T05~T12 (2026-08-06)
+## 제출용 워크플로우 — T05~T12 (2026-08-06)
 
-`MANUAL_BUILD_LOG.md`의 다중 아이템 버그 수정(`Loop_Over_Items` 삽입) 및 T1(T01 성격)/T4(T04 성격) 검증 이후, 원본 명세서 8장 T05~T12를 `test_workflow` + Pin Data로 검증. `02_Google_Sheets_Trigger`/`03_Search_Analysis_Sheet`/`06_LLM_Classify`/`09_Save_Analysis_Result`/`11_Send_Discord_Webhook`만 pin(외부 호출 대체), `Loop_Over_Items`/`02_Normalize_Input`/`04_Is_Duplicate`/`Code in JavaScript`(07 역할)/`08_Generate_Ticket_Metadata`/`10_Is_Urgency_High`/`05_Stop_Duplicate`/`12_End_Normal`은 실제 로직으로 실행.
+`ENGINEERING_NOTES.md`에 정리한 다중 아이템 버그 수정(`Loop_Over_Items` 삽입) 및 T1(T01 성격)/T4(T04 성격) 검증 이후, 원본 명세서 8장 T05~T12를 `test_workflow` + Pin Data로 검증. `02_Google_Sheets_Trigger`/`03_Search_Analysis_Sheet`/`06_LLM_Classify`/`09_Save_Analysis_Result`/`11_Send_Discord_Webhook`만 pin(외부 호출 대체), `Loop_Over_Items`/`02_Normalize_Input`/`04_Is_Duplicate`/`Code in JavaScript`(07 역할)/`08_Generate_Ticket_Metadata`/`10_Is_Urgency_High`/`05_Stop_Duplicate`/`12_End_Normal`은 실제 로직으로 실행.
 
 | ID | 실행ID | 시나리오 | 기대 결과 | 실제 결과 |
 |---|---|---|---|---|
@@ -19,9 +19,9 @@
 
 **주의**: 위 테스트는 `06_LLM_Classify`(실제 Gemini 호출)와 `09_Save_Analysis_Result`(실제 Sheet 쓰기)를 Pin Data로 대체했으므로, 결정론적 로직(중복판정·검증안전판·urgency 라우팅)만 검증됨. 실제 Gemini 분류 정확도·실제 Sheet 저장·실제 Discord 발송은 T1/T4(execution #456)와 이전 세션의 실제 Discord 발송 스크린샷으로 별도 확인됨.
 
-## 수동 재구현 워크플로우(zZxpxTUVhUh2Vvon) — REQ-05 안전판 4케이스 독립 검증 (2026-08-06)
+## 제출용 워크플로우 — REQ-05 안전판 4케이스 독립 검증 (2026-08-06)
 
-원본 워크플로우(4Ag7zWpG2RHM9jtt)에서 이미 검증한 것과 동일한 방법론(`06_LLM_Classify`에 계약 위반 응답을 Pin Data로 직접 주입, 운영 프롬프트·credential 전혀 건드리지 않음)으로 4가지 계약 위반 유형을 각각 단독으로 재현.
+초기 AI 빌드 워크플로우에서 이미 검증한 것과 동일한 방법론(`06_LLM_Classify`에 계약 위반 응답을 Pin Data로 직접 주입, 운영 프롬프트·credential 전혀 건드리지 않음)으로 4가지 계약 위반 유형을 각각 단독으로 재현.
 
 | 케이스 | 실행ID | 입력(06 pin) | validation_error | urgency/needs_review | 09 저장 | 11 Discord |
 |---|---|---|---|---|---|---|
@@ -32,7 +32,7 @@
 
 **결론**: 4건 모두 `status: success`(워크플로 중단 없음), `10_Is_Urgency_High`가 false 분기로 라우팅되어 `12_End_Normal`로 정상 종료(Discord 미실행). 각 케이스마다 실패 사유가 `validation_error`에 정확히 개별 기록됨. REQ-05("LLM 출력이 계약을 어겨도 워크플로우가 죽으면 안 됩니다", "위반 시 urgency=중·needs_review=true", "검증 실패건도 시트에는 저장되어야 합니다")가 4가지 계약 위반 유형 각각에서 독립적으로 최종 확인됨.
 
-## 수동 재구현 워크플로우(zZxpxTUVhUh2Vvon) — 실제 Publish 후 실제 Form 제출 검증 (2026-08-06)
+## 제출용 워크플로우 — 실제 Publish 후 실제 Form 제출 검증 (2026-08-06)
 
 사용자가 시트/Form 이름을 "원마켓 고객 문의 접수"로 정리하고 워크플로우를 직접 Publish(`active:true`, `triggerCount:1`)한 뒤, 실제 Google Form에 5건을 순차 제출. `mode:"trigger"`(실제 프로덕션 트리거)로 5개 실행이 자동 발생, 03_Search_Analysis_Sheet(실제 조회)/06_LLM_Classify(실제 Gemini 호출)/09_Save_Analysis_Result(실제 Sheet 저장)/11_Send_Discord_Webhook(실제 Discord 발송) 전부 Pin Data 없이 실제로 실행됨.
 
@@ -119,7 +119,7 @@ Pin Data로 `06_LLM_Classify` 응답을 시뮬레이션하여 `07_Parse_Validate
 
 Pin Data 테스트가 이 버그를 못 잡은 이유: 테스트마다 `06`의 응답을 가짜로 직접 주입했기 때문에, 실제 요청 본문이 어떻게 만들어지는지는 한 번도 검증되지 않았음(HTTP Request 노드는 credential 보유로 항상 pin됨). **실제 실행에서만 드러나는 유형의 결함.**
 
-**수정**: `06_LLM_Classify`의 `contents` 파라미터를 `$json.xxx` → `$('02_Normalize_Input').item.json.xxx`로 변경 (07과 동일 패턴). 사용자 확인 후 재-Publish 완료(`activeVersionId=2d3acaca-d3d0-457c-95bc-d153fddc7728`).
+**수정**: `06_LLM_Classify`의 `contents` 파라미터를 `$json.xxx` → `$('02_Normalize_Input').item.json.xxx`로 변경 (07과 동일 패턴). 사용자 확인 후 재-Publish 완료.
 
 **후속 조치 필요**: `분석 결과` 시트의 `VOC-20260805-379` 행은 잘못된 분류 데이터 — 제출 전 수동 삭제 또는 수정 권장.
 

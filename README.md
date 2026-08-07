@@ -103,4 +103,4 @@ Windows에서는 `saju-fortune-app/run.bat`을 더블클릭해도 됩니다. (�
 
 Google Form으로 접수된 고객 문의를 n8n이 자동으로 감지해 중복을 거르고, LLM(Gemini)으로 분류·요약한 뒤 Google Sheet에 기록하고, 긴급 건은 Discord로 즉시 알림을 보내는 자동화 워크플로우입니다.
 
-자세한 설계·구현 내용은 [`미니프로젝트1_박정호.md`](./project1-voc-agent/미니프로젝트1_박정호.md)를, 개발 중 겪은 문제(다중 아이템 동시 유입 시 데이터 유실 버그)와 해결 과정은 [`MANUAL_BUILD_LOG.md`](./project1-voc-agent/MANUAL_BUILD_LOG.md)를 참고하세요.
+자세한 설계·구현 내용은 [`미니프로젝트1_박정호.md`](./project1-voc-agent/미니프로젝트1_박정호.md)를, 개발 방식과 엔지니어링 이슈 해결 과정은 [`ENGINEERING_NOTES.md`](./project1-voc-agent/ENGINEERING_NOTES.md)를 참고하세요.
