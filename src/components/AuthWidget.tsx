@@ -44,9 +44,19 @@ export default function AuthWidget() {
 
       {open && (
         <div className="absolute right-0 z-20 mt-2 w-72 rounded-sm border border-border bg-surface p-4 shadow-lg">
-          <p className="mb-3 text-xs text-ink-faint">
-            로그인하면 기기가 바뀌어도 학습 기록을 이어볼 수 있어요.
-          </p>
+          <div className="mb-3 flex items-start justify-between gap-2">
+            <p className="text-xs text-ink-faint">
+              로그인하면 기기가 바뀌어도 학습 기록을 이어볼 수 있어요.
+            </p>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              aria-label="닫기"
+              className="shrink-0 text-ink-faint hover:text-ink"
+            >
+              ✕
+            </button>
+          </div>
           <LoginOptions onSuccess={() => setOpen(false)} />
         </div>
       )}

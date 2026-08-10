@@ -142,9 +142,30 @@ function ReviewWeek({ week }: { week: WeekBucket }) {
     <div className="rounded-md border border-border bg-surface">
       <div className="border-b-2 border-double border-border-strong px-6 pt-5 pb-4">
         <h2 className="font-serif text-xl font-semibold">{week.label} 복습</h2>
-        <p className="mt-1 text-sm text-ink-soft">
-          {Array.from(new Set(week.sessions.map((s) => s.news_title))).join(" · ")}
-        </p>
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          {(() => {
+            const titles = Array.from(new Set(week.sessions.map((s) => s.news_title)));
+            const shown = titles.slice(0, 3);
+            const rest = titles.length - shown.length;
+            return (
+              <>
+                {shown.map((title) => (
+                  <span
+                    key={title}
+                    className="rounded-sm border border-border px-2 py-0.5 text-xs text-ink-soft"
+                  >
+                    {title}
+                  </span>
+                ))}
+                {rest > 0 && (
+                  <span className="rounded-sm border border-border px-2 py-0.5 text-xs text-ink-faint">
+                    외 {rest}건
+                  </span>
+                )}
+              </>
+            );
+          })()}
+        </div>
       </div>
 
       <div className="px-6">
