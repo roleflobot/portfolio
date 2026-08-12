@@ -5,6 +5,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import type { LearningSession, SavedAnswers } from "@/lib/supabase/types";
 import { CategoryTag } from "@/components/CategoryStamp";
+import VoiceLabLauncher from "@/components/VoiceLabLauncher";
 
 function isSavedAnswers(value: unknown): value is SavedAnswers {
   return (
@@ -648,6 +649,8 @@ export default function StudyView({ session }: { session: LearningSession }) {
               )}
             </section>
           )}
+
+          <VoiceLabLauncher session={session} />
 
           <div className="border-t border-border py-6">
             <Link
