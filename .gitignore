@@ -1,0 +1,41 @@
+# Secrets — never commit
+.env
+.env.local
+*.env
+*token*
+*credential*
+*secret*
+*.pem
+*.key
+
+# n8n / MCP local state
+.claude/settings.local.json
+
+# Private strategic context (visa/funding/patent/family) — never commit, never publish
+_private/
+
+# Temporary files and working documents
+AGENT_*.md
+CHANGELOG.md
+DECISIONS.md
+WORKFLOW_STATE.md
+HANDOFF_*.md
+NEW_PROJECT_PLAYBOOK.md
+PROJECT_SPEC.md
+
+# Data and archive files
+*.json
+*.zip
+
+# Old project folders
+project2_screen/
+project3-news-english/
+screen/
+tests/
+workflow/
+제출_미니프로젝트*/
+스크린샷_미니프로젝트*/
+미니프로젝트*.md
+미니프로젝트*.zip
+execution-*/
+프로젝트*_VOC_분석*/
