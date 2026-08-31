@@ -1,0 +1,115 @@
+@import "tailwindcss";
+
+:root {
+  --paper: #e7eaec;
+  --surface: #fdfdfb;
+  --surface-2: #f2f1ec;
+  --ink: #171b22;
+  --ink-soft: #4b5361;
+  --ink-faint: #6b7480;
+  --border: #c7cdd3;
+  --border-strong: #9aa3ac;
+
+  --accent: #1b6e63;
+  --accent-ink: #0e3f39;
+  --accent-tint: #dceae7;
+
+  --success: #2f6e45;
+  --success-tint: #e1ebe3;
+  --danger: #9c3b2e;
+  --danger-tint: #f2e1dd;
+
+  --cat-politics: #7a3b4a;
+  --cat-politics-tint: #f1e3e6;
+  --cat-world: #345377;
+  --cat-world-tint: #e2e8ee;
+  --cat-society: #8a5a34;
+  --cat-society-tint: #efe4d9;
+  --cat-economy: #8a6d1e;
+  --cat-economy-tint: #efe9d4;
+  --cat-tech: #55507a;
+  --cat-tech-tint: #e5e3ef;
+  --cat-culture: #6b6435;
+  --cat-culture-tint: #e9e8d9;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #10141b;
+    --surface: #171c25;
+    --surface-2: #1d2330;
+    --ink: #e7e9ed;
+    --ink-soft: #aab2be;
+    --ink-faint: #838d99;
+    --border: #2a3140;
+    --border-strong: #3b4354;
+
+    --accent: #4fbfae;
+    --accent-ink: #bfeae2;
+    --accent-tint: #163530;
+
+    --success: #6fbe86;
+    --success-tint: #1e2e22;
+    --danger: #d97862;
+    --danger-tint: #3a241f;
+
+    --cat-politics: #c98a9b;
+    --cat-politics-tint: #2e2126;
+    --cat-world: #7fa7cc;
+    --cat-world-tint: #1c2733;
+    --cat-society: #cc9a66;
+    --cat-society-tint: #2d2620;
+    --cat-economy: #d4b45a;
+    --cat-economy-tint: #2c2818;
+    --cat-tech: #a79ed6;
+    --cat-tech-tint: #26243a;
+    --cat-culture: #b7b06a;
+    --cat-culture-tint: #26261b;
+  }
+}
+
+@theme inline {
+  --font-sans: var(--font-public-sans);
+  --font-serif: var(--font-newsreader);
+  --font-mono: var(--font-jetbrains-mono);
+
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-tint: var(--accent-tint);
+  --color-success: var(--success);
+  --color-success-tint: var(--success-tint);
+  --color-danger: var(--danger);
+  --color-danger-tint: var(--danger-tint);
+
+  --color-cat-politics: var(--cat-politics);
+  --color-cat-politics-tint: var(--cat-politics-tint);
+  --color-cat-world: var(--cat-world);
+  --color-cat-world-tint: var(--cat-world-tint);
+  --color-cat-society: var(--cat-society);
+  --color-cat-society-tint: var(--cat-society-tint);
+  --color-cat-economy: var(--cat-economy);
+  --color-cat-economy-tint: var(--cat-economy-tint);
+  --color-cat-tech: var(--cat-tech);
+  --color-cat-tech-tint: var(--cat-tech-tint);
+  --color-cat-culture: var(--cat-culture);
+  --color-cat-culture-tint: var(--cat-culture-tint);
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+::selection {
+  background: var(--accent-tint);
+  color: var(--accent-ink);
+}

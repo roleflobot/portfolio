@@ -1,0 +1,9 @@
+{
+  "regions": ["syd1"],
+  "crons": [
+    {
+      "path": "/api/cron/pregenerate",
+      "schedule": "0 18 * * *"
+    }
+  ]
+}
