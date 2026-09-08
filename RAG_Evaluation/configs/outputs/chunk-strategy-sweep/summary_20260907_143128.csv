@@ -1,0 +1,5 @@
+﻿chunk_size,chunk_overlap,strategy,rerank,count,file_hit@1,page_hit@1,page_hit@3,page_hit@5,mrr,latency_ms,cost_usd,total_tokens
+700,100,mmr,False,5,0.8,0.8,1.0,1.0,0.9,587.3421199969016,0.0,0
+700,100,similarity,False,5,0.8,0.8,1.0,1.0,0.9,693.3970800018869,0.0,0
+700,100,mmr,True,5,0.8,0.8,1.0,1.0,0.9,19105.390659999102,0.0,0
+700,100,similarity,True,5,0.8,0.8,1.0,1.0,0.9,19298.86186000076,0.0,0
